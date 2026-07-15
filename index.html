@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Virendra Kumar Mekhle — Software Developer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="core-canvas"></canvas>
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<header>
+  <div class="wrap">
+    <div class="navbar">
+      <div class="logo">
+        <div class="mark">VM</div>
+        <div class="name">Virendra Kumar Mekhle<span id="navRole">Software Developer</span></div>
+      </div>
+      <nav class="links">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-primary magnetic" href="#contact" data-hire>Hire me</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow"><span class="pulse"></span> Open to new opportunities</div>
+    <div class="role-badge mono" id="heroRole">Software Developer</div>
+    <h1>Building software that <em>runs the business</em>, not just the demo.</h1>
+    <p class="sub">Software developer with 2+ years shipping production ERP, billing, e-commerce, and fintech systems end-to-end — from database schema to the dashboard a client opens every morning.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary magnetic">View projects</a>
+      <a href="#contact" class="btn btn-ghost magnetic" data-hire>Hire me ↓</a>
+    </div>
+    <div class="scroll-cue"><span>SCROLL</span><span class="line"></span></div>
+  </section>
+
+  <section id="about" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">About</div>
+        <h2>Engineering systems that carry real business weight.</h2>
+      </div>
+      <div class="about-card reveal">
+        <p>I design and build production-grade web applications across ERP, billing, accounting, e-commerce, and fintech — with a focus on clean REST APIs, optimized SQL, and MVC architecture that stays maintainable as a codebase scales. My core stack is Java, Spring Boot, Hibernate JPA, PHP, MySQL, and JavaScript, and I specialize in turning manual, spreadsheet-driven processes into reliable systems clients depend on daily.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills-core" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">Core</div>
+        <h2>One profile, three views.</h2>
+        <p>The same core, pointed at a different part of my work — try a tab, or just keep scrolling.</p>
+      </div>
+      <div class="cap-tabs">
+        <button class="cap-tab active" data-shape="sense" data-target="skills">Skills</button>
+        <button class="cap-tab" data-shape="decide" data-target="experience">Experience</button>
+        <button class="cap-tab" data-shape="act" data-target="projects">Projects</button>
+      </div>
+      <div class="cap-viewport"></div>
+      <div class="cap-copy"></div>
+    </div>
+  </section>
+
+  <section id="experience" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">Experience</div>
+        <h2>Where I've built things.</h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <span class="date">OCT 2023 — PRESENT</span>
+          <h3>Software Developer</h3>
+          <span class="org">Arigam Software Pvt Ltd</span>
+          <ul>
+            <li>Engineered and maintained 4+ production web applications across ERP, billing, accounting, e-commerce, and multi-level referral domains for real business clients.</li>
+            <li>Built a full-featured ERP Billing &amp; Accounting System — GST-ready invoicing, payment tracking, purchase orders, ledger management, and role-based reporting dashboards — replacing a client's manual accounting process entirely.</li>
+            <li>Built a complete e-commerce platform with catalog, cart, secure checkout, order tracking, and an admin panel for inventory and fulfillment.</li>
+            <li>Developed a corporate CMS-style website letting non-technical staff manage site content independently.</li>
+            <li>Architected RESTful APIs with proper auth, input validation, and standardized error handling; optimized SQL queries and schemas to cut page load times across high-usage modules.</li>
+          </ul>
+        </div>
+        <div class="tl-item reveal">
+          <span class="date">MAY 2022 — NOV 2022</span>
+          <h3>Software Engineer Intern</h3>
+          <span class="org">Test Yantra Software Solution Pvt Ltd</span>
+          <ul>
+            <li>Contributed to enterprise-grade web applications built on Java and Spring Boot within an Agile team.</li>
+            <li>Designed and implemented RESTful APIs integrated with front-end services for reliable data exchange.</li>
+            <li>Used Hibernate ORM for entity mapping and efficient MySQL operations; wrote unit and integration tests to reduce regression defects.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">Projects</div>
+        <h2>A few things I've shipped.</h2>
+      </div>
+      <div class="proj-grid">
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="ERP Billing &amp; Accounting Software"
+             data-desc="Full-featured enterprise billing and accounting system for a trading business — invoice generation, purchase orders, expense tracking, ledger management, and financial dashboards, with multi-role access and GST-ready PDF invoice export."
+             data-tags="PHP,MySQL,JavaScript,Bootstrap,jQuery">
+          <h3>ERP Billing &amp; Accounting Software</h3>
+          <p>Full-featured enterprise billing and accounting system for a trading business — invoice generation, purchase orders, expense tracking, ledger management, and financial dashboards, with multi-role access and GST-ready PDF invoice export.</p>
+          <div class="tag-row"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">JavaScript</span><span class="tag">Bootstrap</span><span class="tag">jQuery</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="TechNest — E-Commerce Platform"
+             data-desc="Complete online shopping platform with product catalog, cart, wishlist, and checkout workflows. Encrypted authentication, session management, an admin dashboard for inventory, and automated order/shipping email notifications."
+             data-tags="Java,JSP,Servlets,JDBC,MySQL">
+          <h3>TechNest — E-Commerce Platform</h3>
+          <p>Complete online shopping platform with product catalog, cart, wishlist, and checkout workflows. Encrypted authentication, session management, an admin dashboard for inventory, and automated order/shipping email notifications.</p>
+          <div class="tag-row"><span class="tag">Java</span><span class="tag">JSP</span><span class="tag">Servlets</span><span class="tag">JDBC</span><span class="tag">MySQL</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="Payment Way — Digital Wallet"
+             data-desc="Secure peer-to-peer digital payment application with wallet top-up, fund transfers, balance inquiry, and full transaction history. Spring Security with JWT-based session handling and validated REST APIs."
+             data-tags="Spring Boot,Spring Security,Hibernate JPA,MySQL">
+          <h3>Payment Way — Digital Wallet</h3>
+          <p>Secure peer-to-peer digital payment application with wallet top-up, fund transfers, balance inquiry, and full transaction history. Spring Security with JWT-based session handling and validated REST APIs.</p>
+          <div class="tag-row"><span class="tag">Spring Boot</span><span class="tag">Spring Security</span><span class="tag">Hibernate JPA</span><span class="tag">MySQL</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="ColdStorage Inventory Management"
+             data-desc="Inventory and stock management portal built for cold storage and sugarcane trading businesses — secure login, stock tracking, and business reporting, backed by a companion Android app for staff in the field."
+             data-tags="PHP,MySQL,JavaScript,Bootstrap"
+             data-link="https://demo-data.com/ganna/">
+          <h3>ColdStorage Inventory Management</h3>
+          <p>Inventory and stock management portal built for cold storage and sugarcane trading businesses — secure login, stock tracking, and business reporting, backed by a companion Android app for staff in the field.</p>
+          <div class="tag-row"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">JavaScript</span><span class="tag">Bootstrap</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="Newspaper Agency Billing System"
+             data-desc="ERP billing platform for newspaper distribution agencies — subscriber billing &amp; sales, ledger and accounts, multi-store stock tracking, sales reports, and a delivery command center for daily paper delivery management."
+             data-tags="PHP,MySQL,JavaScript,Bootstrap"
+             data-link="https://suvidhabooks.com/news/">
+          <h3>Newspaper Agency Billing System</h3>
+          <p>ERP billing platform for newspaper distribution agencies — subscriber billing &amp; sales, ledger and accounts, multi-store stock tracking, sales reports, and a delivery command center for daily paper delivery management.</p>
+          <div class="tag-row"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">JavaScript</span><span class="tag">Bootstrap</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="Fireworks — Interactive Canvas Animation"
+             data-desc="A particle-based fireworks animation built with vanilla JavaScript and HTML5 Canvas — real-time physics, gravity, and glowing trail rendering with click-to-launch interaction."
+             data-tags="JavaScript,HTML5 Canvas,CSS3"
+             data-link="https://dayan.in/fireworks/">
+          <h3>Fireworks — Interactive Canvas Animation</h3>
+          <p>A particle-based fireworks animation built with vanilla JavaScript and HTML5 Canvas — real-time physics, gravity, and glowing trail rendering with click-to-launch interaction.</p>
+          <div class="tag-row"><span class="tag">JavaScript</span><span class="tag">HTML5 Canvas</span><span class="tag">CSS3</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-overlay" id="projModal" aria-hidden="true">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <div class="modal-gallery" id="modalGallery"></div>
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      <div class="tag-row" id="modalTags"></div>
+      <a class="btn btn-primary magnetic" id="modalLink" target="_blank" rel="noopener">Visit live site ↗</a>
+    </div>
+  </div>
+
+  <section id="skills" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">Skills</div>
+        <h2>What I work with.</h2>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card reveal"><h4>Languages</h4><div class="chip-row"><span class="chip">Core Java</span><span class="chip">PHP</span><span class="chip">JavaScript</span><span class="chip">SQL</span></div></div>
+        <div class="skill-card reveal"><h4>Web Technologies</h4><div class="chip-row"><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">Bootstrap</span><span class="chip">jQuery</span><span class="chip">Ajax</span><span class="chip">JSP</span><span class="chip">Servlets</span><span class="chip">JDBC</span></div></div>
+        <div class="skill-card reveal"><h4>Frameworks &amp; ORM</h4><div class="chip-row"><span class="chip">Spring Boot</span><span class="chip">Spring MVC</span><span class="chip">Spring Security</span><span class="chip">Hibernate JPA</span></div></div>
+        <div class="skill-card reveal"><h4>Database</h4><div class="chip-row"><span class="chip">MySQL</span><span class="chip">Schema design</span><span class="chip">Query optimization</span><span class="chip">Stored procedures</span></div></div>
+        <div class="skill-card reveal"><h4>API Development</h4><div class="chip-row"><span class="chip">REST API design</span><span class="chip">JSON</span><span class="chip">Postman</span></div></div>
+        <div class="skill-card reveal"><h4>Tools &amp; Concepts</h4><div class="chip-row"><span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">OOP</span><span class="chip">SOLID</span><span class="chip">MVC</span><span class="chip">Agile/Scrum</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section-pad">
+    <div class="wrap">
+      <div class="contact-panel reveal">
+        <h2>Hire me.</h2>
+        <p>Send a message and I'll get back to you directly.</p>
+        <form class="hire" id="hireForm">
+          <div class="field">
+            <label for="name">NAME</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required />
+          </div>
+          <div class="field">
+            <label for="email">EMAIL</label>
+            <input type="email" id="email" name="email" placeholder="you@company.com" required />
+          </div>
+          <div class="field">
+            <label for="message">MESSAGE</label>
+            <textarea id="message" name="message" placeholder="Tell me about the role or project..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary magnetic">Send message</button>
+          <div class="form-note" id="formNote"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <span>© 2026 Virendra Kumar Mekhle</span>
+      <div class="foot-links">
+        <a href="mailto:vmekhle@gmail.com" aria-label="Email" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><path d="M3 6.5 12 13l9-6.5"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/Virendra-Kumar" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3.25a1.95 1.95 0 1 0 0 3.9 1.95 1.95 0 0 0 0-3.9zM20.44 20h-3.37v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V20H9.68V8.5h3.24v1.57h.05c.45-.86 1.56-1.77 3.21-1.77 3.43 0 4.26 2.26 4.26 5.2V20z"/></svg>
+        </a>
+        <a href="https://github.com/VirendraMekhle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.15-1.11-1.46-1.11-1.46-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.03a9.6 9.6 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.37.2 2.39.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.86v2.76c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script type="module" src="script.js"></script>
+</body>
+</html>

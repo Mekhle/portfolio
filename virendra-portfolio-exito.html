@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Virendra Kumar Mekhle — Software Developer</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<style>
+:root{
+    --bg: #07070b;
+    --panel: #0e0f16;
+    --blue: #4f9bff;
+    --blue-soft: #8fc1ff;
+    --violet: #6c5ce7;
+    --violet-soft: #8f7ff5;
+    --success: #34d399;
+    --ink: #f4f2ec;
+    --ink-dim: #a8a6b3;
+    --line: rgba(245,243,236,0.09);
+    --card-bg: rgba(255,255,255,0.02);
+    --card-bg-2: rgba(255,255,255,0.03);
+    --nav-bg: rgba(14,15,22,0.55);
+    --canvas-fade: rgba(3,3,6,0.65);
+    --btn-ghost-bg: rgba(255,255,255,0.03);
+    --btn-ghost-bg-hover: rgba(255,255,255,0.07);
+    --field-bg: rgba(255,255,255,0.03);
+    --grain-opacity: 0.035;
+    --grain-blend: overlay;
+    --nav-shadow: 0 8px 30px rgba(0,0,0,0.35);
+    color-scheme: dark;
+  }
+  html, body{ transition: background .5s ease, color .5s ease; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; background: var(--bg); }
+  body{
+    margin:0; background: var(--bg); color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection{ background: var(--blue); color: #04101f; }
+
+  h1,h2,h3,.display{ font-family:'Space Grotesk','Inter',sans-serif; letter-spacing:-0.02em; font-weight:600; margin:0; }
+  .mono{ font-family:'JetBrains Mono', monospace; letter-spacing:.04em; }
+  a{ color:inherit; text-decoration:none; }
+  img{ max-width:100%; display:block; }
+
+  .wrap{ max-width: 1160px; margin:0 auto; padding: 0 28px; }
+  @media (max-width: 700px){ .wrap{ padding:0 20px; } }
+
+  #core-canvas{ position: fixed; inset:0; z-index:1; pointer-events:none; }
+  .grain{ position: fixed; inset:0; z-index:2; pointer-events:none; opacity: var(--grain-opacity); mix-blend-mode: var(--grain-blend);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .vignette{ position: fixed; inset:0; z-index:2; pointer-events:none;
+    background: radial-gradient(ellipse at 50% 40%, transparent 40%, var(--canvas-fade) 100%); }
+
+  section[id]{ scroll-margin-top: 110px; }
+  header{ position: fixed; top:0; left:0; right:0; z-index:50; padding: 18px 0; }
+  .navbar{ position:relative; display:flex; align-items:center; justify-content:space-between; padding:10px 14px 10px 14px;
+    border-radius: 999px; background: var(--nav-bg); border:1px solid var(--line);
+    backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: var(--nav-shadow); }
+  .logo{ display:flex; align-items:center; gap:10px; }
+  .logo .mark{ width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(135deg, var(--blue), var(--violet)); color:#04101f; font-family:'Space Grotesk'; font-weight:800; font-size:14px;
+    box-shadow: 0 0 16px rgba(79,155,255,0.45); }
+  .logo .name{ font-family:'Space Grotesk'; font-weight:700; font-size:14.5px; }
+  .logo .name span{ display:block; font-family:'Inter'; font-weight:400; font-size:11px; color:var(--ink-dim); transition: opacity .35s ease; }
+  nav.links{ display:flex; gap:28px; font-size:14px; color:var(--ink-dim); }
+  nav.links a{ transition: color .25s ease; }
+  nav.links a:hover{ color: var(--ink); }
+  @media (max-width: 820px){ nav.links{ display:none; } }
+
+  .nav-actions{ display:flex; align-items:center; gap:10px; }
+
+  .btn{ position:relative; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding: 11px 22px; border-radius: 999px; font-size:14px; font-weight:600; cursor:pointer;
+    border:1px solid transparent; transition: transform .35s cubic-bezier(.2,.8,.2,1); white-space:nowrap; }
+  .btn-primary{ background: linear-gradient(135deg, var(--blue), var(--violet)); color:#04101f;
+    box-shadow: 0 0 0 0 rgba(79,155,255,0.5); }
+  .btn-primary:hover{ box-shadow: 0 6px 24px rgba(79,155,255,0.35); }
+  .btn-ghost{ background: var(--btn-ghost-bg); border-color: var(--line); color: var(--ink); }
+  .btn-ghost:hover{ background: var(--btn-ghost-bg-hover); }
+
+  .hero{ position:relative; z-index:5; min-height:100svh; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; padding: 140px 24px 80px; }
+  .eyebrow{ display:inline-flex; align-items:center; gap:8px; padding:7px 16px; border-radius:999px;
+    border:1px solid var(--line); background: var(--card-bg-2); font-size:12.5px; color:var(--ink-dim); margin-bottom:26px; }
+  .eyebrow .pulse{ width:6px; height:6px; border-radius:50%; background: var(--success); box-shadow: 0 0 8px var(--success); animation: pulse 1.8s ease-in-out infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.4; transform:scale(1.4);} }
+
+  .role-badge{ font-size: 13px; color: var(--blue-soft); margin-bottom: 18px; min-height: 18px; transition: opacity .4s ease; }
+
+  .hero h1{ font-size: clamp(38px, 7.4vw, 84px); line-height: 1.02; max-width: 17ch; }
+  .hero h1 em{ font-style:normal; background: linear-gradient(120deg, var(--blue-soft), var(--violet-soft) 65%);
+    -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero p.sub{ margin-top:24px; font-size: clamp(15px,1.7vw,19px); color:var(--ink-dim); max-width: 50ch; line-height:1.6; }
+  .hero-actions{ margin-top:38px; display:flex; gap:16px; flex-wrap:wrap; justify-content:center; }
+  .hero-actions .btn-primary{ padding:15px 30px; font-size:15px; }
+  .hero-actions .btn-ghost{ padding:15px 26px; font-size:15px; }
+
+  .scroll-cue{ position:absolute; bottom:38px; left:50%; transform: translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:8px; color:var(--ink-dim); font-size:11px; opacity:.7; }
+  .scroll-cue .line{ width:1px; height:34px; background: linear-gradient(var(--blue), transparent); animation: scrollLine 2s ease-in-out infinite; }
+  @keyframes scrollLine{ 0%{ transform: scaleY(0); transform-origin:top; } 50%{ transform: scaleY(1); transform-origin:top; } 51%{ transform-origin:bottom; } 100%{ transform: scaleY(0); transform-origin:bottom; } }
+
+  section{ position:relative; z-index:5; }
+  .section-pad{ padding: 120px 0; }
+  @media (max-width:720px){ .section-pad{ padding:80px 0; } }
+  .kicker{ font-size:12.5px; color: var(--blue-soft); text-transform:uppercase; letter-spacing:.12em; margin-bottom:14px; font-family:'JetBrains Mono'; }
+  .section-head{ max-width:640px; margin:0 auto 60px; text-align:center; }
+  .section-head h2{ font-size: clamp(28px,4.2vw,46px); line-height:1.08; }
+  .section-head p{ margin-top:14px; color:var(--ink-dim); font-size:15.5px; line-height:1.65; }
+
+  .about-card{ max-width:760px; margin:0 auto; text-align:center; padding: 38px; border-radius:24px;
+    border:1px solid var(--line); background: var(--card-bg); backdrop-filter: blur(6px); }
+  .about-card p{ font-size:16px; line-height:1.75; color: var(--ink-dim); }
+
+  /* skills core tabs */
+  .cap-tabs{ display:flex; justify-content:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
+  .cap-tab{ padding:12px 22px; border-radius:999px; border:1px solid var(--line); background: var(--card-bg);
+    color:var(--ink-dim); font-size:14px; font-weight:600; cursor:pointer; transition: all .4s cubic-bezier(.2,.8,.2,1); }
+  .cap-tab.active{ color:#04101f; background: linear-gradient(135deg, var(--blue-soft), var(--violet-soft)); border-color: transparent; }
+  .cap-viewport{ height:42vh; min-height:300px; }
+  .cap-copy{ max-width:520px; margin:16px auto 0; text-align:center; min-height:80px; }
+  .cap-copy h3{ font-size:22px; margin-bottom:8px; }
+  .cap-copy p{ color:var(--ink-dim); font-size:14.5px; line-height:1.6; }
+
+  /* experience timeline */
+  .timeline{ max-width:820px; margin:0 auto; }
+  .tl-item{ position:relative; padding:0 0 44px 34px; border-left:2px solid var(--line); }
+  .tl-item:last-child{ padding-bottom:0; }
+  .tl-item::before{ content:''; position:absolute; left:-7px; top:2px; width:12px; height:12px; border-radius:50%;
+    background: var(--blue); box-shadow: 0 0 12px rgba(79,155,255,0.6); }
+  .tl-item .date{ font-family:'JetBrains Mono'; font-size:12.5px; color: var(--blue-soft); margin-bottom:6px; display:block; }
+  .tl-item h3{ font-size:19px; margin-bottom:2px; }
+  .tl-item .org{ color: var(--ink-dim); font-size:14px; margin-bottom:14px; display:block; }
+  .tl-item ul{ margin:0; padding-left:18px; color:var(--ink-dim); font-size:14.5px; line-height:1.7; }
+  .tl-item li{ margin-bottom:6px; }
+
+  /* projects */
+  .proj-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap:20px; }
+  @media (max-width:800px){ .proj-grid{ grid-template-columns:1fr; } }
+  .proj-card{ padding:30px; border-radius:20px; border:1px solid var(--line); background: var(--card-bg);
+    cursor:pointer; transition: transform .35s ease, border-color .35s ease; }
+  .proj-card:hover{ transform: translateY(-5px); border-color: rgba(79,155,255,0.35); }
+  .proj-card h3{ font-size:18.5px; margin-bottom:10px; }
+  .proj-card p{ color:var(--ink-dim); font-size:14.5px; line-height:1.65; margin-bottom:16px; }
+  .tag-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .tag{ font-size:11.5px; padding:5px 10px; border-radius:999px; background: rgba(79,155,255,0.12); color: var(--blue-soft); font-family:'JetBrains Mono'; }
+  .proj-link{ display:inline-block; margin-top:14px; font-size:13.5px; font-weight:600; color: var(--blue-soft); }
+  .proj-card:hover .proj-link{ text-decoration: underline; }
+
+  /* project detail modal */
+  .modal-overlay{
+    position: fixed; inset:0; z-index: 200; display:none; align-items:center; justify-content:center;
+    background: rgba(3,3,6,0.72); backdrop-filter: blur(6px); padding: 24px;
+  }
+  .modal-overlay.open{ display:flex; }
+  .modal-box{
+    position:relative; max-width: 560px; width:100%; max-height: 86vh; overflow-y:auto;
+    background: var(--panel); border:1px solid var(--line); border-radius: 24px; padding: 30px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  }
+  .modal-gallery{ display:flex; flex-direction:column; gap:14px; margin-bottom: 20px; }
+  .browser-frame{ border-radius:12px; overflow:hidden; border:1px solid var(--line); background: var(--card-bg-2); }
+  .browser-frame .bar{ display:flex; align-items:center; gap:6px; padding:9px 12px; background: #14151d; }
+  .browser-frame .dot{ width:9px; height:9px; border-radius:50%; }
+  .browser-frame .dot.r{ background:#ff5f57; }
+  .browser-frame .dot.y{ background:#febc2e; }
+  .browser-frame .dot.g{ background:#28c840; }
+  .browser-frame img{ width:100%; display:block; }
+  .modal-box h3{ font-size: 22px; margin-bottom: 12px; }
+  .modal-box p{ color: var(--ink-dim); font-size: 14.5px; line-height:1.7; margin-bottom: 18px; }
+  .modal-box .tag-row{ margin-bottom: 22px; }
+  .modal-close{
+    position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--line); background: var(--card-bg-2); color: var(--ink);
+    cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center;
+  }
+  #modalLink{ display:none; }
+  #modalLink.show{ display:inline-flex; }
+
+  /* skills grid */
+  .skill-grid{ display:grid; grid-template-columns: repeat(3,1fr); gap:18px; }
+  @media (max-width:900px){ .skill-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width:600px){ .skill-grid{ grid-template-columns: 1fr; } }
+  .skill-card{ padding:24px; border-radius:18px; border:1px solid var(--line); background: var(--card-bg); }
+  .skill-card h4{ font-family:'Space Grotesk'; font-size:14px; margin-bottom:12px; color: var(--blue-soft); }
+  .chip-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .chip{ font-size:12.5px; padding:6px 12px; border-radius:999px; background: var(--card-bg-2); border:1px solid var(--line); }
+
+  /* education */
+  .info-card{ max-width: 560px; margin: 0 auto; padding:28px; border-radius:20px; border:1px solid var(--line); background: var(--card-bg); }
+  .info-card .row{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .info-card .row b{ font-size:15px; display:block; }
+  .info-card .row span{ font-size:12.5px; color:var(--ink-dim); }
+  .info-card .row .meta{ font-family:'JetBrains Mono'; font-size:12px; color: var(--blue-soft); white-space:nowrap; text-align:right; }
+
+  /* contact / hire me form */
+  .contact-panel{ padding: 40px 32px; border-radius:24px; border:1px solid var(--line);
+    background: rgba(108,92,231,0.05); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    max-width: 480px; margin: 0 auto; }
+  .contact-panel h2{ font-size: clamp(26px,4.2vw,40px); text-align:center; }
+  .contact-panel > p{ color:var(--ink-dim); margin-top:12px; text-align:center; }
+  form.hire{ margin-top: 34px; display:flex; flex-direction:column; gap:16px; }
+  .field{ display:flex; flex-direction:column; gap:8px; }
+  .field label{ font-size:12.5px; color: var(--ink-dim); font-family:'JetBrains Mono'; letter-spacing:.05em; }
+  .field input, .field textarea{
+    background: var(--field-bg); border:1px solid var(--line); border-radius:14px; padding:13px 16px;
+    color: var(--ink); font-family:'Inter'; font-size:14.5px; resize: vertical; outline:none;
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .field input:focus, .field textarea:focus{ border-color: var(--blue); box-shadow: 0 0 0 3px rgba(79,155,255,0.15); }
+  .field textarea{ min-height: 120px; }
+  form.hire .btn-primary{ margin-top: 6px; align-self:center; padding: 14px 34px; font-size:15px; border:none; }
+  .form-note{ margin-top: 14px; text-align:center; font-size:12.5px; color: var(--ink-dim); min-height: 18px; }
+
+  footer{ position:relative; z-index:5; padding: 34px 0 44px; border-top:1px solid var(--line); background: var(--bg); }
+  .foot-row{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; font-size:13.5px; color:var(--ink); font-weight:500; }
+  .foot-links{ display:flex; gap:12px; }
+  .foot-links a{
+    width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line); background: var(--card-bg-2); color: var(--ink-dim);
+    transition: transform .3s cubic-bezier(.2,.8,.2,1), color .3s ease, border-color .3s ease, background .3s ease;
+  }
+  .foot-links a svg{ width:17px; height:17px; }
+  .foot-links a:hover{ color: var(--blue-soft); border-color: var(--blue-soft); transform: translateY(-3px); background: var(--card-bg); }
+
+  .magnetic{ display:inline-block; will-change: transform; }
+  .reveal{ opacity:0; transform: translateY(28px); }
+</style>
+</head>
+
+</head>
+<body>
+
+<canvas id="core-canvas"></canvas>
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<header>
+  <div class="wrap">
+    <div class="navbar">
+      <div class="logo">
+        <div class="mark">VM</div>
+        <div class="name">Virendra Kumar Mekhle<span id="navRole">Software Developer</span></div>
+      </div>
+      <nav class="links">
+        <a href="#about">About</a>
+        <a href="#experience">Experience</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn btn-primary magnetic" href="#contact" data-hire>Hire me</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="eyebrow"><span class="pulse"></span> Open to new opportunities</div>
+    <div class="role-badge mono" id="heroRole">Software Developer</div>
+    <h1>Building software that <em>runs the business</em>, not just the demo.</h1>
+    <p class="sub">Software developer with 2+ years shipping production ERP, billing, e-commerce, and fintech systems end-to-end — from database schema to the dashboard a client opens every morning.</p>
+    <div class="hero-actions">
+      <a href="#projects" class="btn btn-primary magnetic">View projects</a>
+      <a href="#contact" class="btn btn-ghost magnetic" data-hire>Hire me ↓</a>
+    </div>
+    <div class="scroll-cue"><span>SCROLL</span><span class="line"></span></div>
+  </section>
+
+  <section id="about" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">About</div>
+        <h2>Engineering systems that carry real business weight.</h2>
+      </div>
+      <div class="about-card reveal">
+        <p>I design and build production-grade web applications across ERP, billing, accounting, e-commerce, and fintech — with a focus on clean REST APIs, optimized SQL, and MVC architecture that stays maintainable as a codebase scales. My core stack is Java, Spring Boot, Hibernate JPA, PHP, MySQL, and JavaScript, and I specialize in turning manual, spreadsheet-driven processes into reliable systems clients depend on daily.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills-core" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">Core</div>
+        <h2>One profile, three views.</h2>
+        <p>The same core, pointed at a different part of my work — try a tab, or just keep scrolling.</p>
+      </div>
+      <div class="cap-tabs">
+        <button class="cap-tab active" data-shape="sense" data-target="skills">Skills</button>
+        <button class="cap-tab" data-shape="decide" data-target="experience">Experience</button>
+        <button class="cap-tab" data-shape="act" data-target="projects">Projects</button>
+      </div>
+      <div class="cap-viewport"></div>
+      <div class="cap-copy"></div>
+    </div>
+  </section>
+
+  <section id="experience" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">Experience</div>
+        <h2>Where I've built things.</h2>
+      </div>
+      <div class="timeline">
+        <div class="tl-item reveal">
+          <span class="date">OCT 2023 — PRESENT</span>
+          <h3>Software Developer</h3>
+          <span class="org">Arigam Software Pvt Ltd</span>
+          <ul>
+            <li>Engineered and maintained 4+ production web applications across ERP, billing, accounting, e-commerce, and multi-level referral domains for real business clients.</li>
+            <li>Built a full-featured ERP Billing &amp; Accounting System — GST-ready invoicing, payment tracking, purchase orders, ledger management, and role-based reporting dashboards — replacing a client's manual accounting process entirely.</li>
+            <li>Built a complete e-commerce platform with catalog, cart, secure checkout, order tracking, and an admin panel for inventory and fulfillment.</li>
+            <li>Developed a corporate CMS-style website letting non-technical staff manage site content independently.</li>
+            <li>Architected RESTful APIs with proper auth, input validation, and standardized error handling; optimized SQL queries and schemas to cut page load times across high-usage modules.</li>
+          </ul>
+        </div>
+        <div class="tl-item reveal">
+          <span class="date">MAY 2022 — NOV 2022</span>
+          <h3>Software Engineer Intern</h3>
+          <span class="org">Test Yantra Software Solution Pvt Ltd</span>
+          <ul>
+            <li>Contributed to enterprise-grade web applications built on Java and Spring Boot within an Agile team.</li>
+            <li>Designed and implemented RESTful APIs integrated with front-end services for reliable data exchange.</li>
+            <li>Used Hibernate ORM for entity mapping and efficient MySQL operations; wrote unit and integration tests to reduce regression defects.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">Projects</div>
+        <h2>A few things I've shipped.</h2>
+      </div>
+      <div class="proj-grid">
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="ERP Billing &amp; Accounting Software"
+             data-desc="Full-featured enterprise billing and accounting system for a trading business — invoice generation, purchase orders, expense tracking, ledger management, and financial dashboards, with multi-role access and GST-ready PDF invoice export."
+             data-tags="PHP,MySQL,JavaScript,Bootstrap,jQuery">
+          <h3>ERP Billing &amp; Accounting Software</h3>
+          <p>Full-featured enterprise billing and accounting system for a trading business — invoice generation, purchase orders, expense tracking, ledger management, and financial dashboards, with multi-role access and GST-ready PDF invoice export.</p>
+          <div class="tag-row"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">JavaScript</span><span class="tag">Bootstrap</span><span class="tag">jQuery</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="TechNest — E-Commerce Platform"
+             data-desc="Complete online shopping platform with product catalog, cart, wishlist, and checkout workflows. Encrypted authentication, session management, an admin dashboard for inventory, and automated order/shipping email notifications."
+             data-tags="Java,JSP,Servlets,JDBC,MySQL">
+          <h3>TechNest — E-Commerce Platform</h3>
+          <p>Complete online shopping platform with product catalog, cart, wishlist, and checkout workflows. Encrypted authentication, session management, an admin dashboard for inventory, and automated order/shipping email notifications.</p>
+          <div class="tag-row"><span class="tag">Java</span><span class="tag">JSP</span><span class="tag">Servlets</span><span class="tag">JDBC</span><span class="tag">MySQL</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="Payment Way — Digital Wallet"
+             data-desc="Secure peer-to-peer digital payment application with wallet top-up, fund transfers, balance inquiry, and full transaction history. Spring Security with JWT-based session handling and validated REST APIs."
+             data-tags="Spring Boot,Spring Security,Hibernate JPA,MySQL">
+          <h3>Payment Way — Digital Wallet</h3>
+          <p>Secure peer-to-peer digital payment application with wallet top-up, fund transfers, balance inquiry, and full transaction history. Spring Security with JWT-based session handling and validated REST APIs.</p>
+          <div class="tag-row"><span class="tag">Spring Boot</span><span class="tag">Spring Security</span><span class="tag">Hibernate JPA</span><span class="tag">MySQL</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="ColdStorage Inventory Management"
+             data-desc="Inventory and stock management portal built for cold storage and sugarcane trading businesses — secure login, stock tracking, and business reporting, backed by a companion Android app for staff in the field."
+             data-tags="PHP,MySQL,JavaScript,Bootstrap"
+             data-link="https://demo-data.com/ganna/">
+          <h3>ColdStorage Inventory Management</h3>
+          <p>Inventory and stock management portal built for cold storage and sugarcane trading businesses — secure login, stock tracking, and business reporting, backed by a companion Android app for staff in the field.</p>
+          <div class="tag-row"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">JavaScript</span><span class="tag">Bootstrap</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="Newspaper Agency Billing System"
+             data-desc="ERP billing platform for newspaper distribution agencies — subscriber billing &amp; sales, ledger and accounts, multi-store stock tracking, sales reports, and a delivery command center for daily paper delivery management."
+             data-tags="PHP,MySQL,JavaScript,Bootstrap"
+             data-link="https://suvidhabooks.com/news/">
+          <h3>Newspaper Agency Billing System</h3>
+          <p>ERP billing platform for newspaper distribution agencies — subscriber billing &amp; sales, ledger and accounts, multi-store stock tracking, sales reports, and a delivery command center for daily paper delivery management.</p>
+          <div class="tag-row"><span class="tag">PHP</span><span class="tag">MySQL</span><span class="tag">JavaScript</span><span class="tag">Bootstrap</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+        <div class="proj-card reveal" tabindex="0" role="button"
+             data-title="Fireworks — Interactive Canvas Animation"
+             data-desc="A particle-based fireworks animation built with vanilla JavaScript and HTML5 Canvas — real-time physics, gravity, and glowing trail rendering with click-to-launch interaction."
+             data-tags="JavaScript,HTML5 Canvas,CSS3"
+             data-link="https://dayan.in/fireworks/">
+          <h3>Fireworks — Interactive Canvas Animation</h3>
+          <p>A particle-based fireworks animation built with vanilla JavaScript and HTML5 Canvas — real-time physics, gravity, and glowing trail rendering with click-to-launch interaction.</p>
+          <div class="tag-row"><span class="tag">JavaScript</span><span class="tag">HTML5 Canvas</span><span class="tag">CSS3</span></div>
+          <span class="proj-link">View details ↗</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="modal-overlay" id="projModal" aria-hidden="true">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+      <div class="modal-gallery" id="modalGallery"></div>
+      <h3 id="modalTitle"></h3>
+      <p id="modalDesc"></p>
+      <div class="tag-row" id="modalTags"></div>
+      <a class="btn btn-primary magnetic" id="modalLink" target="_blank" rel="noopener">Visit live site ↗</a>
+    </div>
+  </div>
+
+  <section id="skills" class="section-pad">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <div class="kicker">Skills</div>
+        <h2>What I work with.</h2>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-card reveal"><h4>Languages</h4><div class="chip-row"><span class="chip">Core Java</span><span class="chip">PHP</span><span class="chip">JavaScript</span><span class="chip">SQL</span></div></div>
+        <div class="skill-card reveal"><h4>Web Technologies</h4><div class="chip-row"><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">Bootstrap</span><span class="chip">jQuery</span><span class="chip">Ajax</span><span class="chip">JSP</span><span class="chip">Servlets</span><span class="chip">JDBC</span></div></div>
+        <div class="skill-card reveal"><h4>Frameworks &amp; ORM</h4><div class="chip-row"><span class="chip">Spring Boot</span><span class="chip">Spring MVC</span><span class="chip">Spring Security</span><span class="chip">Hibernate JPA</span></div></div>
+        <div class="skill-card reveal"><h4>Database</h4><div class="chip-row"><span class="chip">MySQL</span><span class="chip">Schema design</span><span class="chip">Query optimization</span><span class="chip">Stored procedures</span></div></div>
+        <div class="skill-card reveal"><h4>API Development</h4><div class="chip-row"><span class="chip">REST API design</span><span class="chip">JSON</span><span class="chip">Postman</span></div></div>
+        <div class="skill-card reveal"><h4>Tools &amp; Concepts</h4><div class="chip-row"><span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">OOP</span><span class="chip">SOLID</span><span class="chip">MVC</span><span class="chip">Agile/Scrum</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section-pad">
+    <div class="wrap">
+      <div class="contact-panel reveal">
+        <h2>Hire me.</h2>
+        <p>Send a message and I'll get back to you directly.</p>
+        <form class="hire" id="hireForm">
+          <div class="field">
+            <label for="name">NAME</label>
+            <input type="text" id="name" name="name" placeholder="Your name" required />
+          </div>
+          <div class="field">
+            <label for="email">EMAIL</label>
+            <input type="email" id="email" name="email" placeholder="you@company.com" required />
+          </div>
+          <div class="field">
+            <label for="message">MESSAGE</label>
+            <textarea id="message" name="message" placeholder="Tell me about the role or project..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary magnetic">Send message</button>
+          <div class="form-note" id="formNote"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <span>© 2026 Virendra Kumar Mekhle</span>
+      <div class="foot-links">
+        <a href="mailto:vmekhle@gmail.com" aria-label="Email" title="Email">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><path d="M3 6.5 12 13l9-6.5"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/Virendra-Kumar" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3.25a1.95 1.95 0 1 0 0 3.9 1.95 1.95 0 0 0 0-3.9zM20.44 20h-3.37v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V20H9.68V8.5h3.24v1.57h.05c.45-.86 1.56-1.77 3.21-1.77 3.43 0 4.26 2.26 4.26 5.2V20z"/></svg>
+        </a>
+        <a href="https://github.com/VirendraMekhle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.15-1.11-1.46-1.11-1.46-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.09-.65.35-1.08.63-1.33-2.22-.25-4.56-1.11-4.56-4.95 0-1.09.39-1.99 1.03-2.69-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.03a9.6 9.6 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.37.2 2.39.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.85-2.34 4.7-4.57 4.94.36.31.68.92.68 1.86v2.76c0 .27.18.58.69.48A10 10 0 0 0 12 2z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+/* roles shown one by one, in order */
+  const roles = ['Software Developer', 'Full Stack Developer'];
+  let roleIdx = 0;
+  const heroRole = document.getElementById('heroRole');
+  const navRole = document.getElementById('navRole');
+  setInterval(()=>{
+    roleIdx = (roleIdx + 1) % roles.length;
+    [heroRole, navRole].forEach(el=>{
+      if(!el) return;
+      el.style.opacity = 0;
+      setTimeout(()=>{ el.textContent = roles[roleIdx]; el.style.opacity = 1; }, 350);
+    });
+  }, 2400);
+
+  /* project detail modal */
+  const modal = document.getElementById('projModal');
+  const modalGallery = document.getElementById('modalGallery');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalTags = document.getElementById('modalTags');
+  const modalLink = document.getElementById('modalLink');
+  const modalClose = document.getElementById('modalClose');
+
+  function openProjectModal(card){
+    modalTitle.textContent = card.dataset.title || '';
+    modalDesc.textContent = card.dataset.desc || '';
+    modalTags.innerHTML = (card.dataset.tags || '').split(',').filter(Boolean)
+      .map(t=>`<span class="tag">${t.trim()}</span>`).join('');
+
+    const imgs = (card.dataset.imgs || card.dataset.img || '').split(',').map(s=>s.trim()).filter(Boolean);
+    modalGallery.innerHTML = imgs.map(src => `
+      <div class="browser-frame">
+        <div class="bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <img src="${src}" alt="${card.dataset.title || ''} screenshot" loading="lazy" />
+      </div>
+    `).join('');
+
+    if(card.dataset.link){
+      modalLink.href = card.dataset.link; modalLink.classList.add('show');
+    } else {
+      modalLink.removeAttribute('href'); modalLink.classList.remove('show');
+    }
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  }
+  function closeProjectModal(){
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  document.querySelectorAll('.proj-card').forEach(card=>{
+    card.addEventListener('click', ()=> openProjectModal(card));
+    card.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openProjectModal(card); }
+    });
+  });
+  modalClose.addEventListener('click', closeProjectModal);
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) closeProjectModal(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeProjectModal(); });
+
+  /* "Hire me" always scrolls to the contact form and focuses the name field */
+  document.querySelectorAll('[data-hire]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const target = document.getElementById('contact');
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(()=>{ document.getElementById('name')?.focus(); }, 550);
+    });
+  });
+
+  /* hire form -> POSTs to /api/contact, a serverless function that sends the
+     message through your Gmail account via Nodemailer + an App Password.
+     The password lives only as a server-side environment variable — never
+     in this file. Requires deploying api/contact.js (see README below).
+     Until it's deployed, this falls back to opening the visitor's own
+     email client instead, so the form never silently fails. */
+  const form = document.getElementById('hireForm');
+  const note = document.getElementById('formNote');
+  const submitBtn = form.querySelector('button[type="submit"]');
+
+  form.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    note.textContent = '';
+    try{
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message })
+      });
+      const data = await res.json();
+      if(res.ok && data.ok){
+        note.style.color = 'var(--success)';
+        note.textContent = 'Message sent — I\'ll get back to you soon.';
+        form.reset();
+      } else {
+        throw new Error(data.error || 'Something went wrong');
+      }
+    } catch(err){
+      // fallback: opens the visitor's own email client, addressed to you
+      const subject = encodeURIComponent('Portfolio inquiry from ' + name);
+      const body = encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+      window.location.href = `mailto:vmekhle@gmail.com?subject=${subject}&body=${body}`;
+      note.textContent = 'Opening your email client…';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send message';
+    }
+  });
+</script>
+
+<script type="module">
+import * as THREE from "three";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isSmall = window.innerWidth < 720;
+const lowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+
+const COUNT = reduceMotion ? 0 : (isSmall || lowPower ? 1400 : 3200);
+
+const canvas = document.getElementById('core-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, isSmall ? 1.5 : 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 100);
+camera.position.set(0,0,6.2);
+
+scene.add(new THREE.AmbientLight(0x334466, 0.6));
+const key = new THREE.PointLight(0x4f9bff, 2.4, 20); key.position.set(3,2,4); scene.add(key);
+const rim = new THREE.PointLight(0x6c5ce7, 2.0, 20); rim.position.set(-3,-2,-3); scene.add(rim);
+
+function fibonacciSphere(n, radius){
+  const pts = new Float32Array(n*3);
+  const golden = Math.PI * (3 - Math.sqrt(5));
+  for(let i=0;i<n;i++){
+    const y = 1 - (i/(n-1))*2;
+    const r = Math.sqrt(1-y*y);
+    const theta = golden*i;
+    pts[i*3] = Math.cos(theta)*r*radius;
+    pts[i*3+1] = y*radius;
+    pts[i*3+2] = Math.sin(theta)*r*radius;
+  }
+  return pts;
+}
+function torusKnot(n,R,r,p,q){
+  const pts = new Float32Array(n*3);
+  for(let i=0;i<n;i++){
+    const t = (i/n)*Math.PI*2;
+    const a=p*t, b=q*t;
+    const cx=(R+r*Math.cos(b))*Math.cos(a);
+    const cy=(R+r*Math.cos(b))*Math.sin(a);
+    const cz=r*Math.sin(b);
+    pts[i*3]=cx*0.85; pts[i*3+1]=cy*0.85; pts[i*3+2]=cz*0.85;
+  }
+  return pts;
+}
+function helix(n, radius, turns, height){
+  const pts = new Float32Array(n*3);
+  for(let i=0;i<n;i++){
+    const t=i/n; const strand=i%2;
+    const angle = t*Math.PI*2*turns + (strand?Math.PI:0);
+    pts[i*3]=Math.cos(angle)*radius;
+    pts[i*3+1]=(t-0.5)*height;
+    pts[i*3+2]=Math.sin(angle)*radius;
+  }
+  return pts;
+}
+
+const shapes = {
+  sense: fibonacciSphere(COUNT, 1.7),
+  decide: torusKnot(COUNT, 1.35, 0.55, 2, 3),
+  act: helix(COUNT, 1.15, 4.5, 3.2)
+};
+
+const geometry = new THREE.BufferGeometry();
+const positions = new Float32Array(COUNT*3);
+positions.set(shapes.sense);
+geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
+
+const colors = new Float32Array(COUNT*3);
+const cA = new THREE.Color(0x4f9bff);
+const cB = new THREE.Color(0x8f7ff5);
+for(let i=0;i<COUNT;i++){
+  const c = cA.clone().lerp(cB, Math.random());
+  colors[i*3]=c.r; colors[i*3+1]=c.g; colors[i*3+2]=c.b;
+}
+geometry.setAttribute('color', new THREE.BufferAttribute(colors,3));
+
+function makeSprite(){
+  const s=64; const cnv=document.createElement('canvas'); cnv.width=cnv.height=s;
+  const ctx=cnv.getContext('2d');
+  const g = ctx.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+  g.addColorStop(0,'rgba(255,255,255,1)'); g.addColorStop(0.35,'rgba(255,255,255,0.6)'); g.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=g; ctx.fillRect(0,0,s,s);
+  return new THREE.CanvasTexture(cnv);
+}
+const sprite = makeSprite();
+
+const material = new THREE.PointsMaterial({
+  size: isSmall?0.045:0.036, map: sprite, vertexColors:true, transparent:true,
+  depthWrite:false, blending: THREE.AdditiveBlending, opacity:0.95
+});
+const core = new THREE.Points(geometry, material);
+scene.add(core);
+
+const fieldCount = reduceMotion?0:(isSmall?200:500);
+const fieldGeo = new THREE.BufferGeometry();
+const fieldPos = new Float32Array(fieldCount*3);
+for(let i=0;i<fieldCount;i++){
+  fieldPos[i*3]=(Math.random()-0.5)*14; fieldPos[i*3+1]=(Math.random()-0.5)*14; fieldPos[i*3+2]=(Math.random()-0.5)*14-3;
+}
+fieldGeo.setAttribute('position', new THREE.BufferAttribute(fieldPos,3));
+const fieldMat = new THREE.PointsMaterial({ size:0.02, map:sprite, color:0xffffff, transparent:true, opacity:0.3, blending:THREE.AdditiveBlending, depthWrite:false });
+const field = new THREE.Points(fieldGeo, fieldMat);
+scene.add(field);
+
+let composer;
+const useBloom = !reduceMotion && !(isSmall && lowPower);
+if(useBloom){
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.85, 0.6, 0.15);
+  composer.addPass(bloom);
+}
+
+let mouseX=0, mouseY=0, targetRotX=0, targetRotY=0, curRotX=0, curRotY=0;
+window.addEventListener('pointermove', (e)=>{
+  mouseX = (e.clientX/window.innerWidth)*2-1;
+  mouseY = (e.clientY/window.innerHeight)*2-1;
+  targetRotY = mouseX*0.5; targetRotX = mouseY*0.3;
+  key.position.x = 3+mouseX*2; key.position.y = 2-mouseY*2;
+}, { passive:true });
+
+let fromArr = shapes.sense.slice();
+let toArr = shapes.sense.slice();
+let morphT = 1;
+const posAttr = geometry.attributes.position;
+
+function setShape(name){ fromArr = posAttr.array.slice(); toArr = shapes[name]; morphT = 0; }
+
+const copyMap = {
+  sense: { title:'Skills', body:'Java, Spring Boot, Hibernate JPA, PHP, MySQL, and JavaScript — the core toolkit behind everything I build.' },
+  decide: { title:'Experience', body:'2+ years shipping production ERP, billing, and e-commerce systems at Arigam Software, plus an internship at Test Yantra.' },
+  act: { title:'Projects', body:'Six shipped builds, from enterprise billing platforms to a from-scratch fireworks animation — scroll down to see them.' }
+};
+function renderCopy(key){
+  const c = copyMap[key];
+  document.querySelector('.cap-copy').innerHTML = `<h3>${c.title}</h3><p>${c.body}</p>`;
+}
+renderCopy('sense');
+
+function setActiveTab(shape){
+  document.querySelectorAll('.cap-tab').forEach(t=>t.classList.toggle('active', t.dataset.shape === shape));
+}
+
+document.querySelectorAll('.cap-tab').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    const shape = tab.dataset.shape;
+    setActiveTab(shape);
+    setShape(shape);
+    renderCopy(shape);
+    lastAutoShape = shape;
+    const targetId = tab.dataset.target;
+    const targetEl = targetId && document.getElementById(targetId);
+    if(targetEl) targetEl.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+});
+
+/* the core also morphs — and the matching tab lights up — as Skills / Experience /
+   Projects scroll into view, so navigating through the page mirrors clicking a tab */
+const sectionShapeMap = {
+  'experience': 'decide',
+  'projects': 'act',
+  'skills': 'sense'
+};
+var lastAutoShape = 'sense';
+const sectionObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const shape = sectionShapeMap[entry.target.id];
+      if(shape && shape !== lastAutoShape){
+        lastAutoShape = shape;
+        setShape(shape);
+        setActiveTab(shape);
+        renderCopy(shape);
+      }
+    }
+  });
+}, { threshold: 0.4 });
+Object.keys(sectionShapeMap).forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) sectionObserver.observe(el);
+});
+
+gsap.to(core.rotation, { y: Math.PI*2, ease:'none', scrollTrigger:{ trigger: document.body, start:'top top', end:'bottom bottom', scrub:1.2 } });
+gsap.to(camera.position, { z: 4.6, ease:'none', scrollTrigger:{ trigger: document.body, start:'top top', end:'bottom bottom', scrub:1.2 } });
+gsap.to('#core-canvas', { opacity: 0.35, ease:'none', scrollTrigger:{ trigger:'footer', start:'top bottom', end:'top center', scrub:true } });
+
+document.querySelectorAll('.reveal').forEach((el)=>{
+  gsap.to(el, { opacity:1, y:0, duration:1, ease:'power3.out', scrollTrigger:{ trigger: el, start:'top 85%' } });
+});
+
+gsap.from('.hero .eyebrow, .hero h1, .hero p.sub, .hero-actions', {
+  opacity:0, y:24, duration:1.1, ease:'power3.out', stagger:0.12, delay:0.15
+});
+
+document.querySelectorAll('.magnetic').forEach(btn=>{
+  btn.addEventListener('mousemove', (e)=>{
+    const r = btn.getBoundingClientRect();
+    const relX = e.clientX - r.left - r.width/2;
+    const relY = e.clientY - r.top - r.height/2;
+    gsap.to(btn, { x: relX*0.28, y: relY*0.5, duration:0.4, ease:'power3.out' });
+  });
+  btn.addEventListener('mouseleave', ()=>{ gsap.to(btn, { x:0, y:0, duration:0.5, ease:'elastic.out(1,0.4)' }); });
+});
+
+const clock = new THREE.Clock();
+function animate(){
+  requestAnimationFrame(animate);
+  const t = clock.getElapsedTime();
+  core.position.y = Math.sin(t*0.6)*0.06;
+  field.rotation.y = t*0.02;
+  curRotX += (targetRotX-curRotX)*0.04;
+  curRotY += (targetRotY-curRotY)*0.04;
+  core.rotation.x = curRotX + Math.sin(t*0.15)*0.05;
+  core.rotation.z = curRotY*0.3;
+  camera.position.x += ((mouseX*0.4)-camera.position.x)*0.03;
+  camera.position.y += ((-mouseY*0.25)-camera.position.y)*0.03;
+  camera.lookAt(0,0,0);
+  if(morphT<1){
+    morphT = Math.min(1, morphT+0.028);
+    const ease = 1-Math.pow(1-morphT,3);
+    const arr = posAttr.array;
+    for(let i=0;i<arr.length;i++){ arr[i] = fromArr[i] + (toArr[i]-fromArr[i])*ease; }
+    posAttr.needsUpdate = true;
+  }
+  if(composer){ composer.render(); } else { renderer.render(scene, camera); }
+}
+if(!reduceMotion){ animate(); } else { renderer.render(scene, camera); }
+
+window.addEventListener('resize', ()=>{
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  if(composer) composer.setSize(window.innerWidth, window.innerHeight);
+});
+</script>
+
+</body>
+</html>
