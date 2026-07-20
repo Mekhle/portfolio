@@ -4,6 +4,22 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Virendra Kumar Mekhle — Software Developer</title>
+<meta name="description" content="Virendra Kumar Mekhle — freelance software developer specializing in production-grade ERP, billing, e-commerce, fintech, and SaaS systems. Java, Spring Boot, PHP, MySQL. Available remote." />
+<meta name="author" content="Virendra Kumar Mekhle" />
+
+<link rel="icon" type="image/png" sizes="64x64" href="assets/vkm-favicon-64.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="assets/vkm-favicon-32.png" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Virendra Kumar Mekhle — Software Developer" />
+<meta property="og:description" content="Freelance software developer building production-grade ERP, billing, e-commerce, fintech, and SaaS systems. Available remote." />
+<meta property="og:image" content="https://vkmekhle.vercel.app/assets/og-image.jpg" />
+<meta property="og:url" content="https://vkmekhle.vercel.app/" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Virendra Kumar Mekhle — Software Developer" />
+<meta name="twitter:description" content="Freelance software developer building production-grade ERP, billing, e-commerce, fintech, and SaaS systems. Available remote." />
+<meta name="twitter:image" content="https://vkmekhle.vercel.app/assets/og-image.jpg" />
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,7 +48,7 @@
   <div class="wrap">
     <div class="navbar">
       <div class="logo">
-        <div class="mark">VM</div>
+        <img class="mark" src="assets/vkm-logo-nav.png" alt="VKM logo" />
         <div class="name">Virendra Kumar Mekhle<span id="navRole">Software Developer</span></div>
       </div>
       <nav class="links">
@@ -51,10 +67,10 @@
 
 <main>
   <section class="hero">
-    <div class="eyebrow"><span class="pulse"></span> Open to new opportunities</div>
+    <div class="eyebrow"><span class="pulse"></span> Freelance · Available remote</div>
     <div class="role-badge mono" id="heroRole">Software Developer</div>
-    <h1>Building software that <em>runs the business</em>, not just the demo.</h1>
-    <p class="sub">Software developer with 2+ years shipping production ERP, billing, e-commerce, and fintech systems end-to-end — from database schema to the dashboard a client opens every morning.</p>
+    <h1>Good software doesn't announce itself — <em>it just keeps working</em>.</h1>
+    <p class="sub">For the last two years, I've been the person teams call when a spreadsheet finally breaks under its own weight. I build ERP, billing, and SaaS platforms that take over the parts of a business that used to run on memory, sticky notes, and hope — and turn them into systems that just work, quietly, every single day.</p>
     <div class="hero-actions">
       <a href="#projects" class="btn btn-primary magnetic">View projects</a>
       <a href="#contact" class="btn btn-ghost magnetic" data-hire>Hire me ↓</a>
@@ -66,10 +82,11 @@
     <div class="wrap">
       <div class="section-head reveal">
         <div class="kicker">About</div>
-        <h2>Engineering systems that carry real business weight.</h2>
+        <h2>A developer who turns operational chaos into working software.</h2>
       </div>
       <div class="about-card reveal">
-        <p>I design and build production-grade web applications across ERP, billing, accounting, e-commerce, and fintech — with a focus on clean REST APIs, optimized SQL, and MVC architecture that stays maintainable as a codebase scales. My core stack is Java, Spring Boot, Hibernate JPA, PHP, MySQL, and JavaScript, and I specialize in turning manual, spreadsheet-driven processes into reliable systems clients depend on daily.</p>
+        <p>I'm Virendra — a software developer with 2+ years building production systems for real businesses, not proof-of-concepts. My work has covered GST-ready billing and accounting platforms, e-commerce storefronts with full order and inventory management, a peer-to-peer digital wallet secured with Spring Security and JWT, a cold-storage inventory portal for the sugarcane trade, and an ERP billing system built specifically for newspaper distribution agencies.</p>
+        <p style="margin-top:18px;">My core stack is Java, Spring Boot, Hibernate JPA, PHP, MySQL, and JavaScript, with a strong focus on clean REST APIs, optimized SQL, and MVC architecture that stays maintainable as a codebase grows. I care less about clever code and more about systems that hold up under real, everyday use. I currently work as an independent freelance developer, available remotely, for teams that need someone who can own a project from database design through to the dashboard a client actually opens every morning.</p>
       </div>
     </div>
   </section>
@@ -232,7 +249,8 @@
           </div>
           <div class="field">
             <label for="email">EMAIL</label>
-            <input type="email" id="email" name="email" placeholder="you@company.com" required />
+            <input type="email" id="email" name="email" placeholder="you@company.com" required autocomplete="off" />
+            <span class="field-hint" id="emailHint"></span>
           </div>
           <div class="field">
             <label for="message">MESSAGE</label>

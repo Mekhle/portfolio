@@ -1,6 +1,6 @@
 /* ---- UI interactions (theme, roles, magnetic buttons, hire form) ---- */
 /* roles shown one by one, in order */
-  const roles = ['Software Developer', 'Full Stack Developer'];
+  const roles = ['Software Developer', 'Full Stack Developer', 'Web Developer', 'Website Designer', 'Application Developer'];
   let roleIdx = 0;
   const heroRole = document.getElementById('heroRole');
   const navRole = document.getElementById('navRole');
@@ -12,6 +12,25 @@
       setTimeout(()=>{ el.textContent = roles[roleIdx]; el.style.opacity = 1; }, 350);
     });
   }, 2400);
+
+  /* small CDN tech icons on tag chips — falls back to plain text if an icon slug misses */
+  const techIconSlugs = {
+    'php':'php', 'mysql':'mysql', 'javascript':'javascript', 'bootstrap':'bootstrap',
+    'jquery':'jquery', 'java':'java', 'spring boot':'spring', 'spring security':'spring',
+    'hibernate jpa':'hibernate', 'html5 canvas':'html5', 'css3':'css3', 'git':'git',
+    'github':'github', 'postman':'postman'
+  };
+  function decorateTag(tagEl){
+    const name = tagEl.textContent.trim();
+    const slug = techIconSlugs[name.toLowerCase()];
+    if(!slug || tagEl.querySelector('img')) return;
+    const icon = document.createElement('img');
+    icon.src = `https://cdn.simpleicons.org/${slug}/8fc1ff`;
+    icon.alt = ''; icon.className = 'tag-icon';
+    icon.onerror = () => icon.remove();
+    tagEl.prepend(icon);
+  }
+  document.querySelectorAll('.tag-row .tag').forEach(decorateTag);
 
   /* project detail modal */
   const modal = document.getElementById('projModal');
@@ -27,6 +46,7 @@
     modalDesc.textContent = card.dataset.desc || '';
     modalTags.innerHTML = (card.dataset.tags || '').split(',').filter(Boolean)
       .map(t=>`<span class="tag">${t.trim()}</span>`).join('');
+    modalTags.querySelectorAll('.tag').forEach(decorateTag);
 
     const imgs = (card.dataset.imgs || card.dataset.img || '').split(',').map(s=>s.trim()).filter(Boolean);
     modalGallery.innerHTML = imgs.map(src => `
@@ -77,12 +97,90 @@
   const form = document.getElementById('hireForm');
   const note = document.getElementById('formNote');
   const submitBtn = form.querySelector('button[type="submit"]');
+  const emailInput = document.getElementById('email');
+  const emailHint = document.getElementById('emailHint');
+
+  /* ---- email checks, all client-side (no paid verification API) ----
+     1. format check       — well-formed local@domain.tld
+     2. fake-pattern check — "aaaa", "asdf", "test", all-same-character locals
+     3. disposable domains — known throwaway-email providers, blocked outright
+     4. typo suggestions   — catches "gmial.com" -> did you mean "gmail.com"? */
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/;
+  const disposableDomains = [
+    'mailinator.com','tempmail.com','temp-mail.org','guerrillamail.com','10minutemail.com',
+    'throwawaymail.com','yopmail.com','trashmail.com','getnada.com','dispostable.com',
+    'fakeinbox.com','sharklasers.com','maildrop.cc','mintemail.com'
+  ];
+  const commonDomains = ['gmail.com','yahoo.com','outlook.com','hotmail.com','icloud.com','protonmail.com'];
+  const fakeLocalPattern = /^(.)\1*$/; // "aaaa", "xxxx" etc — one character repeated
+  const obviousJunk = ['test','asdf','abc','xxxx','fake','none','sample','example'];
+
+  function levenshtein(a, b){
+    const dp = Array.from({length:a.length+1}, (_,i)=>[i,...Array(b.length).fill(0)]);
+    for(let j=0;j<=b.length;j++) dp[0][j]=j;
+    for(let i=1;i<=a.length;i++) for(let j=1;j<=b.length;j++){
+      dp[i][j] = a[i-1]===b[j-1] ? dp[i-1][j-1] : 1+Math.min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]);
+    }
+    return dp[a.length][b.length];
+  }
+
+  function checkEmail(email){
+    if(!email) return { valid:false, hint:'' };
+    if(!emailPattern.test(email)) return { valid:false, hint:'That doesn\'t look like a complete email address.' };
+
+    const [local, domain] = email.split('@');
+    if(fakeLocalPattern.test(local) || obviousJunk.includes(local.toLowerCase())){
+      return { valid:false, hint:'That looks like a placeholder, not a real address.' };
+    }
+    if(disposableDomains.includes(domain.toLowerCase())){
+      return { valid:false, hint:'Temporary/disposable email addresses aren\'t accepted.' };
+    }
+    // typo suggestion against common providers
+    for(const known of commonDomains){
+      if(domain.toLowerCase() !== known && levenshtein(domain.toLowerCase(), known) <= 2 && domain.toLowerCase() !== known){
+        const dist = levenshtein(domain.toLowerCase(), known);
+        if(dist > 0 && dist <= 2 && domain.toLowerCase().length >= known.length - 2){
+          return { valid:false, hint:`Did you mean @${known}?`, suggestion: email.split('@')[0] + '@' + known };
+        }
+      }
+    }
+    return { valid:true, hint:'Looks good.' };
+  }
+
+  function renderEmailState(){
+    const email = emailInput.value.trim();
+    if(!email){ emailInput.classList.remove('valid','invalid'); emailHint.textContent=''; emailHint.className='field-hint'; return; }
+    const result = checkEmail(email);
+    emailInput.classList.toggle('valid', result.valid);
+    emailInput.classList.toggle('invalid', !result.valid);
+    emailHint.className = 'field-hint ' + (result.valid ? 'ok' : 'bad');
+    if(result.suggestion){
+      emailHint.innerHTML = `Did you mean <button type="button" id="applySuggestion">${result.suggestion}</button>?`;
+      document.getElementById('applySuggestion').addEventListener('click', ()=>{
+        emailInput.value = result.suggestion;
+        renderEmailState();
+      });
+    } else {
+      emailHint.textContent = result.hint;
+    }
+    return result.valid;
+  }
+  emailInput.addEventListener('input', renderEmailState);
+  emailInput.addEventListener('blur', renderEmailState);
 
   form.addEventListener('submit', async (e)=>{
     e.preventDefault();
     const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
+    const email = emailInput.value.trim();
     const message = document.getElementById('message').value.trim();
+
+    // format is well-formed, not a placeholder pattern, and not a disposable
+    // domain — this can't confirm the mailbox truly exists without a paid
+    // verification API (see note in chat), but it blocks the fake/junk cases.
+    if(!renderEmailState()){
+      emailInput.focus();
+      return;
+    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
@@ -251,13 +349,26 @@ const posAttr = geometry.attributes.position;
 function setShape(name){ fromArr = posAttr.array.slice(); toArr = shapes[name]; morphT = 0; }
 
 const copyMap = {
-  sense: { title:'Skills', body:'Java, Spring Boot, Hibernate JPA, PHP, MySQL, and JavaScript — the core toolkit behind everything I build.' },
-  decide: { title:'Experience', body:'2+ years shipping production ERP, billing, and e-commerce systems at Arigam Software, plus an internship at Test Yantra.' },
-  act: { title:'Projects', body:'Six shipped builds, from enterprise billing platforms to a from-scratch fireworks animation — scroll down to see them.' }
+  sense: {
+    title:'Skills',
+    body:'Java, Spring Boot, Hibernate JPA, PHP, MySQL, and JavaScript are the tools I reach for to turn a business owner\'s half-explained problem into a working system.',
+    quote:'Tools don\'t ship software. Judgment does.'
+  },
+  decide: {
+    title:'Experience',
+    body:'2+ years turning manual, spreadsheet-driven operations into production ERP, billing, and e-commerce systems at Arigam Software — plus an internship at Test Yantra building enterprise apps on Java and Spring Boot in an Agile team.',
+    quote:'Every line of code here is still out there, doing real work for a real business.'
+  },
+  act: {
+    title:'Projects',
+    body:'Six shipped builds, from enterprise billing platforms and a sugarcane cold-storage portal to a from-scratch fireworks animation.',
+    quote:'Different problems, same instinct: make the mess disappear.'
+  }
 };
 function renderCopy(key){
   const c = copyMap[key];
-  document.querySelector('.cap-copy').innerHTML = `<h3>${c.title}</h3><p>${c.body}</p>`;
+  document.querySelector('.cap-copy').innerHTML =
+    `<h3>${c.title}</h3><p>${c.body}</p><p class="core-quote">${c.quote}</p>`;
 }
 renderCopy('sense');
 
