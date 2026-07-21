@@ -148,7 +148,7 @@
 
   .about-card{ max-width:760px; margin:0 auto; text-align:left; padding: 40px 44px; border-radius:24px;
     border:1px solid var(--line); background: var(--card-bg); backdrop-filter: blur(6px); }
-  .about-card p{ font-size:16px; line-height:1.75; color: var(--ink-dim); }
+  .about-card p{ font-size:16px; line-height:1.75; color: var(--ink-dim); text-align:justify; }
 
   /* skills core tabs */
   .cap-tabs{ display:flex; justify-content:center; gap:10px; margin-bottom:8px; flex-wrap:wrap; }
@@ -170,7 +170,7 @@
   .tl-item .date{ font-family:'JetBrains Mono'; font-size:12.5px; color: var(--blue-soft); margin-bottom:6px; display:block; }
   .tl-item h3{ font-size:19px; margin-bottom:2px; }
   .tl-item .org{ color: var(--ink-dim); font-size:14px; margin-bottom:14px; display:block; }
-  .tl-item ul{ margin:0; padding-left:18px; color:var(--ink-dim); font-size:14.5px; line-height:1.7; }
+  .tl-item ul{ margin:0; padding-left:18px; color:var(--ink-dim); font-size:14.5px; line-height:1.7; text-align:justify; }
   .tl-item li{ margin-bottom:6px; }
 
   /* projects */
@@ -180,10 +180,9 @@
     cursor:pointer; transition: transform .35s ease, border-color .35s ease; }
   .proj-card:hover{ transform: translateY(-5px); border-color: rgba(79,155,255,0.35); }
   .proj-card h3{ font-size:18.5px; margin-bottom:10px; }
-  .proj-card p{ color:var(--ink-dim); font-size:14.5px; line-height:1.65; margin-bottom:16px; }
+  .proj-card p{ color:var(--ink-dim); font-size:14.5px; line-height:1.65; margin-bottom:16px; text-align:justify; }
   .tag-row{ display:flex; gap:8px; flex-wrap:wrap; }
-  .tag{ display:inline-flex; align-items:center; gap:5px; font-size:11.5px; padding:5px 10px; border-radius:999px; background: rgba(79,155,255,0.12); color: var(--blue-soft); font-family:'JetBrains Mono'; }
-  .tag-icon{ width:12px; height:12px; opacity:0.9; }
+  .tag{ font-size:11.5px; padding:5px 10px; border-radius:999px; background: rgba(79,155,255,0.12); color: var(--blue-soft); font-family:'JetBrains Mono'; }
   .proj-link{ display:inline-block; margin-top:14px; font-size:13.5px; font-weight:600; color: var(--blue-soft); }
   .proj-card:hover .proj-link{ text-decoration: underline; }
 
@@ -207,7 +206,7 @@
   .browser-frame .dot.g{ background:#28c840; }
   .browser-frame img{ width:100%; display:block; }
   .modal-box h3{ font-size: 22px; margin-bottom: 12px; }
-  .modal-box p{ color: var(--ink-dim); font-size: 14.5px; line-height:1.7; margin-bottom: 18px; }
+  .modal-box p{ color: var(--ink-dim); font-size: 14.5px; line-height:1.7; margin-bottom: 18px; text-align:justify; }
   .modal-box .tag-row{ margin-bottom: 22px; }
   .modal-close{
     position:absolute; top:18px; right:18px; width:34px; height:34px; border-radius:50%;
@@ -509,7 +508,7 @@
         <a href="mailto:vmekhle@gmail.com" aria-label="Email" title="Email">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" opacity="0"/><path d="M3 6.5 12 13l9-6.5"/><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
         </a>
-        <a href="https://linkedin.com/in/Virendra-Kumar" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+        <a href="https://www.linkedin.com/in/virendra-kumar-2v" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3.25a1.95 1.95 0 1 0 0 3.9 1.95 1.95 0 0 0 0-3.9zM20.44 20h-3.37v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V20H9.68V8.5h3.24v1.57h.05c.45-.86 1.56-1.77 3.21-1.77 3.43 0 4.26 2.26 4.26 5.2V20z"/></svg>
         </a>
         <a href="https://github.com/VirendraMekhle" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
@@ -534,25 +533,6 @@
     });
   }, 2400);
 
-  /* small CDN tech icons on tag chips — falls back to plain text if an icon slug misses */
-  const techIconSlugs = {
-    'php':'php', 'mysql':'mysql', 'javascript':'javascript', 'bootstrap':'bootstrap',
-    'jquery':'jquery', 'java':'java', 'spring boot':'spring', 'spring security':'spring',
-    'hibernate jpa':'hibernate', 'html5 canvas':'html5', 'css3':'css3', 'git':'git',
-    'github':'github', 'postman':'postman'
-  };
-  function decorateTag(tagEl){
-    const name = tagEl.textContent.trim();
-    const slug = techIconSlugs[name.toLowerCase()];
-    if(!slug || tagEl.querySelector('img')) return;
-    const icon = document.createElement('img');
-    icon.src = `https://cdn.simpleicons.org/${slug}/8fc1ff`;
-    icon.alt = ''; icon.className = 'tag-icon';
-    icon.onerror = () => icon.remove();
-    tagEl.prepend(icon);
-  }
-  document.querySelectorAll('.tag-row .tag').forEach(decorateTag);
-
   /* project detail modal */
   const modal = document.getElementById('projModal');
   const modalGallery = document.getElementById('modalGallery');
@@ -567,7 +547,6 @@
     modalDesc.textContent = card.dataset.desc || '';
     modalTags.innerHTML = (card.dataset.tags || '').split(',').filter(Boolean)
       .map(t=>`<span class="tag">${t.trim()}</span>`).join('');
-    modalTags.querySelectorAll('.tag').forEach(decorateTag);
 
     const imgs = (card.dataset.imgs || card.dataset.img || '').split(',').map(s=>s.trim()).filter(Boolean);
     modalGallery.innerHTML = imgs.map(src => `

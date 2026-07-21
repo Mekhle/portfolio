@@ -13,25 +13,6 @@
     });
   }, 2400);
 
-  /* small CDN tech icons on tag chips — falls back to plain text if an icon slug misses */
-  const techIconSlugs = {
-    'php':'php', 'mysql':'mysql', 'javascript':'javascript', 'bootstrap':'bootstrap',
-    'jquery':'jquery', 'java':'java', 'spring boot':'spring', 'spring security':'spring',
-    'hibernate jpa':'hibernate', 'html5 canvas':'html5', 'css3':'css3', 'git':'git',
-    'github':'github', 'postman':'postman'
-  };
-  function decorateTag(tagEl){
-    const name = tagEl.textContent.trim();
-    const slug = techIconSlugs[name.toLowerCase()];
-    if(!slug || tagEl.querySelector('img')) return;
-    const icon = document.createElement('img');
-    icon.src = `https://cdn.simpleicons.org/${slug}/8fc1ff`;
-    icon.alt = ''; icon.className = 'tag-icon';
-    icon.onerror = () => icon.remove();
-    tagEl.prepend(icon);
-  }
-  document.querySelectorAll('.tag-row .tag').forEach(decorateTag);
-
   /* project detail modal */
   const modal = document.getElementById('projModal');
   const modalGallery = document.getElementById('modalGallery');
@@ -46,7 +27,6 @@
     modalDesc.textContent = card.dataset.desc || '';
     modalTags.innerHTML = (card.dataset.tags || '').split(',').filter(Boolean)
       .map(t=>`<span class="tag">${t.trim()}</span>`).join('');
-    modalTags.querySelectorAll('.tag').forEach(decorateTag);
 
     const imgs = (card.dataset.imgs || card.dataset.img || '').split(',').map(s=>s.trim()).filter(Boolean);
     modalGallery.innerHTML = imgs.map(src => `
