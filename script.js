@@ -94,8 +94,8 @@ function open(c){last=c;var th=c.querySelector('.thumb');document.getElementById
 document.getElementById('mt').textContent=c.dataset.title;document.getElementById('md').textContent=c.dataset.desc;
 document.getElementById('mf').innerHTML=(c.dataset.feat||'').split('|').filter(Boolean).map(function(t){return '<li>'+t+'</li>'}).join('');
 document.getElementById('mg').innerHTML=c.dataset.tags.split(',').map(function(t){return '<span>'+t.trim()+'</span>'}).join('');
-ov.classList.add('open');ov.setAttribute('aria-hidden','false');document.getElementById('mx').focus()}
-function close(){ov.classList.remove('open');ov.setAttribute('aria-hidden','true');if(last)last.focus()}
+ov.classList.add('open');ov.setAttribute('aria-hidden','false');document.body.style.overflow='hidden';document.getElementById('mx').focus()}
+function close(){ov.classList.remove('open');ov.setAttribute('aria-hidden','true');document.body.style.overflow='';if(last)last.focus()}
 document.querySelectorAll('.pc').forEach(function(c){c.addEventListener('click',function(){open(c)})});
 document.getElementById('mx').addEventListener('click',close);
 ov.addEventListener('click',function(e){if(e.target===ov)close()});
@@ -206,9 +206,8 @@ fit()})();
 /* ---- part 7 ---- */
 (function(){
 var calm=matchMedia('(prefers-reduced-motion:reduce)').matches,io='IntersectionObserver' in window;
-var bar=document.createElement('div');bar.className='prog';bar.setAttribute('aria-hidden','true');document.body.appendChild(bar);
 var blobs=[].slice.call(document.querySelectorAll('.blob')),fs=[.05,-.08,.06],busy=false;
-function onScroll(){if(busy)return;busy=true;requestAnimationFrame(function(){var y=window.scrollY||0,max=document.documentElement.scrollHeight-innerHeight;bar.style.transform='scaleX('+(max>0?Math.min(1,y/max):0)+')';
+function onScroll(){if(busy)return;busy=true;requestAnimationFrame(function(){var y=window.scrollY||0;
 if(!calm)blobs.forEach(function(b,i){var d=Math.max(-140,Math.min(140,y*fs[i%3]));b.style.transform='translate3d(0,'+d+'px,0)'});busy=false})}
 addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);onScroll();
 var E='cubic-bezier(.22,1,.36,1)',els=[].slice.call(document.querySelectorAll('section .head,.about,.svc,.job,.pc,.wc,.sk,.stats div,.tc'));

@@ -1358,7 +1358,9 @@ form .btn {
     align-items: center;
     justify-content: center;
     padding: var(--s4);
-    background: rgba(27, 42, 68, .45)
+    background: rgba(14, 23, 42, .75);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px)
 }
 
 .ov.open {
@@ -1373,7 +1375,10 @@ form .btn {
     max-height: calc(100dvh - 32px);
     overflow: auto;
     padding: var(--s6);
-    background: rgba(255, 255, 255, .96)
+    background: #FFFFFF !important;
+    border: 1px solid rgba(255, 255, 255, .9);
+    border-radius: var(--r-card);
+    box-shadow: 0 32px 80px rgba(10, 18, 38, .45)
 }
 
 .x {
@@ -1940,18 +1945,6 @@ form .btn {
     transition: opacity .8s cubic-bezier(.2, .7, .2, 1), transform .8s cubic-bezier(.2, .7, .2, 1)
 }
 
-.prog {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    z-index: 70;
-    background: var(--acc);
-    transform: scaleX(0);
-    transform-origin: 0 50%;
-    pointer-events: none
-}
 
 @media (prefers-reduced-motion:reduce) {
     .rv {
