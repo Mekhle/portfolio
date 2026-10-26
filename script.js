@@ -74,6 +74,19 @@ T.forEach(function(t){var f=document.createElement('figure');f.className='tc gla
 var roles=['Software Developer','Full Stack Developer','Web Developer','Website Designer','Application Developer'],ri=0,nr=document.getElementById('navRole');
 var still=matchMedia('(prefers-reduced-motion:reduce)').matches;
 if(!still&&nr)setInterval(function(){ri=(ri+1)%roles.length;nr.style.opacity=0;setTimeout(function(){nr.textContent=roles[ri];nr.style.opacity=1},350)},4800);
+var eyeRoles=['Freelance Developer, Available Remote','Full Stack Developer','Web Developer & Designer','Android & Software Engineer'];
+var eyeEl=document.getElementById('eyeRole');
+if(!still&&eyeEl){
+var eIdx=0,cIdx=eyeRoles[0].length,del=false;
+function typeStep(){
+var cur=eyeRoles[eIdx];
+if(del){cIdx--;eyeEl.textContent=cur.substring(0,cIdx)}
+else{cIdx++;eyeEl.textContent=cur.substring(0,cIdx)}
+var wait=del?28:55;
+if(!del&&cIdx===cur.length){wait=3000;del=true}
+else if(del&&cIdx===0){del=false;eIdx=(eIdx+1)%eyeRoles.length;wait=350}
+setTimeout(typeStep,wait)}
+setTimeout(function(){del=true;typeStep()},3200)}
 var ov=document.getElementById('ov'),last=null;
 var PHOTOS={wallet:{t:"Payment Way wallet app on a phone at a desk",p:"50% 50%",s:"images/wallet.webp"},erp:{t:"ERP billing and accounting dashboard on a monitor",p:"50% 52%",s:"images/erp.webp"},newspaper:{t:"Newspaper agency billing system on a desktop",p:"50% 55%",s:"images/newspaper.webp"},cold:{t:"Cold storage management dashboard in a warehouse",p:"50% 50%",s:"images/cold.webp"},parking:{t:"Parking app on a handheld device printing a receipt",p:"50% 50%",s:"images/parking.webp"},technest:{t:"TechNest online shop on a monitor",p:"50% 50%",s:"images/technest.webp"},sbmchat:{t:"SBMChat chat app on a phone",p:"50% 50%",s:"images/sbmchat.webp"},fireworks:{t:"Fireworks agent shop on a monitor",p:"50% 46%",s:"images/fireworks.webp"}};
 document.querySelectorAll('.pc[data-photo]').forEach(function(c){var m=PHOTOS[c.dataset.photo],t=c.querySelector('.thumb');if(m&&t){t.classList.add('photo');t.innerHTML='<img alt="'+m.t+'" src="'+m.s+'" style="object-position:'+m.p+'" loading="lazy">'}});

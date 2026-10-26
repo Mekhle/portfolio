@@ -455,15 +455,41 @@ section {
     border: 1px solid var(--edge);
     font-size: var(--fs-cap);
     color: var(--ink2);
-    margin-bottom: var(--s3)
+    margin-bottom: var(--s3);
+    white-space: nowrap;
+    max-width: 100%;
+    box-sizing: border-box
 }
 
 .eye i {
     width: 8px;
     height: 8px;
+    flex: none;
     border-radius: 50%;
     background: var(--ok);
     animation: pulse 1.8s ease-in-out infinite
+}
+
+#eyeRole {
+    display: inline-block;
+    min-height: 1.2em;
+    font-weight: 500
+}
+
+.eye-cur {
+    display: inline-block;
+    width: 2px;
+    height: 12px;
+    background: var(--acc);
+    margin-left: 2px;
+    border-radius: 1px;
+    animation: curBlink .8s steps(2, start) infinite;
+    vertical-align: middle
+}
+
+@keyframes curBlink {
+    0%, 100% { opacity: 1 }
+    50% { opacity: 0 }
 }
 
 @keyframes pulse {
