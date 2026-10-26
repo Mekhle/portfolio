@@ -274,7 +274,7 @@ section {
     min-height: 58px;
     padding: 6px var(--s3) 6px var(--s4);
     border-radius: 29px;
-    background: rgba(245, 248, 255, .96);
+    background: var(--solid);
     -webkit-backdrop-filter: blur(28px) saturate(1.5);
     backdrop-filter: blur(28px) saturate(1.5);
     border: 1px solid var(--edge);
@@ -1595,7 +1595,7 @@ form .btn {
         min-height: 52px;
         padding: 6px 8px 6px 12px;
         border-radius: 26px;
-        background: rgba(245, 248, 255, .97);
+        background: var(--solid);
         -webkit-backdrop-filter: blur(28px) saturate(1.5);
         backdrop-filter: blur(28px) saturate(1.5);
         border: 1px solid var(--edge);
@@ -1627,7 +1627,7 @@ form .btn {
         width: min(300px, calc(100vw - 28px));
         padding: var(--s2);
         border-radius: 22px;
-        background: rgba(235, 242, 255, .96);
+        background: var(--solid);
         -webkit-backdrop-filter: blur(24px);
         backdrop-filter: blur(24px);
         border: 1px solid var(--edge);
