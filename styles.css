@@ -479,11 +479,10 @@ section {
     font-family: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
     font-weight: 700;
     font-style: normal;
-    font-size: min(calc((100vw - 32px) / 8.8), 72px);
-    line-height: 1.05;
+    font-size: min(calc((100vw - 32px) / 8.6), 72px);
+    line-height: 1.08;
     letter-spacing: -.005em;
-    max-width: 100%;
-    overflow: hidden
+    white-space: nowrap !important
 }
 
 .nmb {
@@ -1691,12 +1690,6 @@ form .btn {
 }
 
 @media (max-width:560px) {
-    .nm {
-        font-size: clamp(28px, 8.4vw, 44px);
-        white-space: normal;
-        word-break: normal
-    }
-
     .brand small {
         display: none
     }
