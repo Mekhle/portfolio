@@ -156,16 +156,12 @@ ${safeMessage}
             <td class="footer-pad" style="padding: 16px 28px; background-color: #FAFBFD; border-top: 1px solid #EEF2F8;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td align="left" valign="middle">
+                  <td align="center" valign="middle">
                     <a class="reply-btn" href="mailto:${safeEmail}?subject=Re:%20Portfolio%20inquiry%20from%20${encodeURIComponent(cleanName)}" style="display: inline-block; background-color: #1B2A44; color: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; padding: 10px 20px; border-radius: 8px;">
                       Reply to ${safeName} &rarr;
                     </a>
                   </td>
-                  <td class="source-tag" align="right" valign="middle">
-                    <span style="font-size: 12px; color: #8C9BB5;">
-                      virendra-portfolio
-                    </span>
-                  </td>
+                 
                 </tr>
               </table>
             </td>
