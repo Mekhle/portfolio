@@ -41,7 +41,10 @@ html {
     scroll-padding-top: 96px;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
-    -webkit-tap-highlight-color: transparent
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
 }
 
 body {
@@ -50,8 +53,17 @@ body {
     color: var(--ink);
     font: 400 var(--fs-body)/1.7 var(--fb);
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
     padding-bottom: env(safe-area-inset-bottom, 0px);
     -webkit-font-smoothing: antialiased
+}
+
+main {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden
 }
 
 h1,
@@ -132,6 +144,8 @@ section {
     position: relative;
     z-index: 1;
     max-width: 1200px;
+    width: 100%;
+    box-sizing: border-box;
     margin: 0 auto;
     padding: var(--sec) max(var(--pad), env(safe-area-inset-right, 0px)) var(--sec) max(var(--pad), env(safe-area-inset-left, 0px))
 }
@@ -465,10 +479,11 @@ section {
     font-family: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
     font-weight: 700;
     font-style: normal;
-    font-size: min(calc((100vw - 32px) / 8.4), 72px);
-    line-height: 1;
+    font-size: min(calc((100vw - 32px) / 8.8), 72px);
+    line-height: 1.05;
     letter-spacing: -.005em;
-    white-space: nowrap
+    max-width: 100%;
+    overflow: hidden
 }
 
 .nmb {
@@ -576,7 +591,9 @@ section {
 
 .orbit {
     position: relative;
-    height: clamp(300px, 38vw, 560px)
+    height: clamp(300px, 38vw, 560px);
+    max-width: 100%;
+    overflow: hidden
 }
 
 .orbit canvas,
@@ -999,6 +1016,7 @@ section {
     container-type: inline-size;
     overflow-x: auto;
     overflow-y: hidden;
+    overscroll-behavior-x: contain;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
@@ -1634,7 +1652,8 @@ form .btn {
     .web-slider-wrap {
         scroll-snap-type: x mandatory;
         padding: 0;
-        overflow-x: auto
+        overflow-x: auto;
+        overscroll-behavior-x: contain
     }
 
     .web-track {
@@ -1651,6 +1670,15 @@ form .btn {
         scroll-snap-stop: always;
         box-sizing: border-box
     }
+
+    .stats div {
+        min-width: 0
+    }
+
+    .stats span {
+        white-space: normal;
+        overflow-wrap: break-word
+    }
 }
 
 @media (min-width:721px) and (max-width:1024px) {
@@ -1663,6 +1691,12 @@ form .btn {
 }
 
 @media (max-width:560px) {
+    .nm {
+        font-size: clamp(28px, 8.4vw, 44px);
+        white-space: normal;
+        word-break: normal
+    }
+
     .brand small {
         display: none
     }
@@ -2039,7 +2073,7 @@ form .btn {
 
     .gp {
         right: 12px;
-        width: calc(100vw - 24px)
+        width: calc(100% - 24px)
     }
 }
 
