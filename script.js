@@ -115,8 +115,20 @@
     ov.addEventListener('click', function (e) { if (e.target === ov) close() });
     addEventListener('keydown', function (e) { if (e.key === 'Escape') close() });
     var gp = document.getElementById('gp'), gb = document.getElementById('gb');
-    function openGP() { gp.classList.add('open'); document.body.style.overflow = 'hidden'; gb.setAttribute('aria-expanded', 'true'); setTimeout(function () { document.getElementById('name').focus({ preventScroll: true }) }, 60) }
-    function closeGP() { gp.classList.remove('open'); document.body.style.overflow = ''; gb.setAttribute('aria-expanded', 'false') }
+    function openGP() {
+        if (note) { note.textContent = ''; note.style.color = '' }
+        if (eh) { eh.textContent = ''; eh.className = 'hint' }
+        if (ei) { ei.classList.remove('valid', 'invalid') }
+        gp.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        gb.setAttribute('aria-expanded', 'true');
+        setTimeout(function () { document.getElementById('name').focus({ preventScroll: true }) }, 60)
+    }
+    function closeGP() {
+        gp.classList.remove('open');
+        document.body.style.overflow = '';
+        gb.setAttribute('aria-expanded', 'false')
+    }
     gb.addEventListener('click', function () { gp.classList.contains('open') ? closeGP() : openGP() });
     document.getElementById('gx').addEventListener('click', function () { closeGP(); gb.focus() });
     addEventListener('keydown', function (e) { if (e.key === 'Escape' && gp.classList.contains('open')) closeGP() });
@@ -148,8 +160,26 @@
         if (!render()) { ei.focus(); return }
         sb.disabled = true; sb.textContent = 'Sending…'; note.textContent = '';
         fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name, email: email, message: message }) })
-            .then(function (r) { return r.json().then(function (d) { if (r.ok && d.ok) { note.style.color = 'var(--ok)'; note.textContent = "Message sent. I'll get back to you soon."; f.reset(); eh.textContent = '' } else throw new Error('x') }) })
-            .catch(function () { location.href = 'mailto:vmekhle@gmail.com?subject=' + encodeURIComponent('Portfolio inquiry from ' + name) + '&body=' + encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')'); note.textContent = 'Opening your email app…' })
+            .then(function (r) {
+                return r.json().then(function (d) {
+                    if (r.ok && d.ok) {
+                        note.style.color = 'var(--ok)';
+                        note.textContent = "Message sent. I'll get back to you soon.";
+                        f.reset();
+                        eh.textContent = '';
+                        ei.classList.remove('valid', 'invalid');
+                        setTimeout(function () {
+                            closeGP();
+                            note.textContent = '';
+                        }, 1800);
+                    } else throw new Error('x')
+                })
+            })
+            .catch(function () {
+                location.href = 'mailto:vmekhle@gmail.com?subject=' + encodeURIComponent('Portfolio inquiry from ' + name) + '&body=' + encodeURIComponent(message + '\n\n— ' + name + ' (' + email + ')');
+                note.textContent = 'Opening your email app…';
+                setTimeout(function () { closeGP() }, 2000);
+            })
             .finally(function () { sb.disabled = false; sb.textContent = 'Send Message' })
     });
 })();

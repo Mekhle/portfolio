@@ -60,29 +60,41 @@ module.exports = async (req, res) => {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit',
       timeZone: 'Asia/Kolkata',
-      timeZoneName: 'short'
     });
 
     const safeName = escapeHtml(cleanName);
     const safeEmail = escapeHtml(cleanEmail);
     const safeMessage = escapeHtml(cleanMessage).replace(/\n/g, '<br>');
 
-    // Card template (the exact design you loved in the first screenshot)
+    // Mobile-optimized, responsive card template
     const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
   <title>New Portfolio Message</title>
+  <style>
+    @media only screen and (max-width: 600px) {
+      .outer-pad { padding: 16px 8px !important; }
+      .card-pad { padding: 20px 18px 16px !important; }
+      .body-pad { padding: 18px 18px 22px !important; }
+      .footer-pad { padding: 14px 18px !important; }
+      .sender-name { font-size: 20px !important; }
+      .reply-btn { display: block !important; width: 100% !important; text-align: center !important; box-sizing: border-box !important; }
+      .source-tag { display: block !important; text-align: center !important; margin-top: 8px !important; }
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 32px 16px; background-color: #F4F6FB; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #1B2A44; -webkit-font-smoothing: antialiased;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+<body style="margin: 0; padding: 28px 12px; background-color: #F4F6FB; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #1B2A44; -webkit-font-smoothing: antialiased;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="outer-pad">
     <tr>
       <td align="center">
         <!-- Main Card -->
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px; background-color: #FFFFFF; border-radius: 16px; border: 1px solid #E3EBFA; box-shadow: 0 4px 20px rgba(27, 42, 68, 0.05); overflow: hidden;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px; width: 100%; background-color: #FFFFFF; border-radius: 16px; border: 1px solid #E3EBFA; box-shadow: 0 4px 20px rgba(27, 42, 68, 0.05); overflow: hidden;">
           
           <!-- Sleek Top Accent Line -->
           <tr>
@@ -91,41 +103,46 @@ module.exports = async (req, res) => {
 
           <!-- Header with Sender Info -->
           <tr>
-            <td style="padding: 28px 32px 18px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+            <td class="card-pad" style="padding: 24px 28px 18px;">
+              <!-- Top Row: Badge & Timestamp -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom: 8px;">
                 <tr>
-                  <td>
-                    <span style="display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #4B5BEA; margin-bottom: 4px;">
+                  <td align="left" valign="middle">
+                    <span style="display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #4B5BEA;">
                       Portfolio Inquiry
                     </span>
-                    <h2 style="margin: 2px 0 0; font-size: 20px; font-weight: 700; color: #1B2A44; letter-spacing: -0.01em;">
-                      ${safeName}
-                    </h2>
-                    <a href="mailto:${safeEmail}" style="display: inline-block; margin-top: 4px; font-size: 14px; color: #46587A; text-decoration: none;">
-                      ${safeEmail}
-                    </a>
                   </td>
-                  <td align="right" valign="top">
-                    <span style="font-size: 12px; color: #8C9BB5; white-space: nowrap;">
+                  <td align="right" valign="middle">
+                    <span style="font-size: 12px; color: #8C9BB5; font-weight: 500;">
                       ${formattedDate}
                     </span>
                   </td>
                 </tr>
               </table>
+
+              <!-- Full-width Sender Name (never cramped or wrapped per word) -->
+              <h2 class="sender-name" style="margin: 4px 0 2px 0; font-size: 22px; line-height: 1.3; font-weight: 700; color: #1B2A44; letter-spacing: -0.015em; word-break: normal;">
+                ${safeName}
+              </h2>
+
+              <!-- Sender Email -->
+              <a href="mailto:${safeEmail}" style="display: inline-block; font-size: 14px; color: #46587A; text-decoration: none; word-break: break-all;">
+                ${safeEmail}
+              </a>
             </td>
           </tr>
 
           <!-- Hairline Divider -->
           <tr>
-            <td style="padding: 0 32px;">
+            <td style="padding: 0 28px;">
               <div style="border-top: 1px solid #EEF2F8; width: 100%;"></div>
             </td>
           </tr>
 
           <!-- Message Body -->
           <tr>
-            <td style="padding: 22px 32px 28px;">
-              <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #8C9BB5; margin-bottom: 12px;">
+            <td class="body-pad" style="padding: 20px 28px 24px;">
+              <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #8C9BB5; margin-bottom: 10px;">
                 Message
               </div>
               <div style="font-size: 15px; line-height: 1.7; color: #1B2A44; white-space: pre-wrap; word-break: break-word;">
@@ -136,15 +153,15 @@ ${safeMessage}
 
           <!-- Action Footer -->
           <tr>
-            <td style="padding: 18px 32px; background-color: #FAFBFD; border-top: 1px solid #EEF2F8;">
+            <td class="footer-pad" style="padding: 16px 28px; background-color: #FAFBFD; border-top: 1px solid #EEF2F8;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
-                  <td>
-                    <a href="mailto:${safeEmail}?subject=Re:%20Portfolio%20inquiry%20from%20${encodeURIComponent(cleanName)}" style="display: inline-block; background-color: #1B2A44; color: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; padding: 10px 20px; border-radius: 8px;">
+                  <td align="left" valign="middle">
+                    <a class="reply-btn" href="mailto:${safeEmail}?subject=Re:%20Portfolio%20inquiry%20from%20${encodeURIComponent(cleanName)}" style="display: inline-block; background-color: #1B2A44; color: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; padding: 10px 20px; border-radius: 8px;">
                       Reply to ${safeName} &rarr;
                     </a>
                   </td>
-                  <td align="right" valign="middle">
+                  <td class="source-tag" align="right" valign="middle">
                     <span style="font-size: 12px; color: #8C9BB5;">
                       virendra-portfolio
                     </span>
