@@ -185,7 +185,8 @@
 })();
 /* ---- part 4 ---- */
 (function () {
-    var b = document.getElementById('mbtn'), p = document.getElementById('mpanel'); if (!b || !p) return;
+    var b = document.getElementById('mbtn'), p = document.getElementById('mpanel');
+    if (!b || !p) return;
     function set(o) { p.classList.toggle('open', o); b.setAttribute('aria-expanded', o ? 'true' : 'false'); b.setAttribute('aria-label', o ? 'Close menu' : 'Open menu') }
     b.addEventListener('click', function (e) { e.stopPropagation(); set(!p.classList.contains('open')) });
     p.addEventListener('click', function (e) { if (e.target.closest('a')) set(false) });
