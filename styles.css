@@ -488,8 +488,15 @@ section {
 }
 
 @keyframes curBlink {
-    0%, 100% { opacity: 1 }
-    50% { opacity: 0 }
+
+    0%,
+    100% {
+        opacity: 1
+    }
+
+    50% {
+        opacity: 0
+    }
 }
 
 @keyframes pulse {
@@ -540,31 +547,36 @@ section {
 
 .tag {
     margin-bottom: var(--s2);
-    font: 500 16px/1.5 var(--fb);
-    color: var(--ink2);
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(23px, 3.8vw, 34px);
+    line-height: 1.25;
     letter-spacing: -.01em
 }
 
+.tag-txt {
+    background: linear-gradient(135deg, #1B2A44 0%, #2F5BEA 50%, #7B42F6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block
+}
+
 .ed {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
     margin-bottom: var(--s5);
-    font-family: var(--fb)
+    font-family: var(--fb);
+    width: 100%
 }
 
 .ed-deg {
-    font-size: 15px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--ink)
-}
-
-.ed-meta {
-    font-size: 14px;
+    display: block;
+    font-style: italic;
     font-weight: 400;
+    font-size: clamp(12px, 3.3vw, 15.5px);
     line-height: 1.4;
-    color: var(--ink2)
+    color: var(--ink2);
+    white-space: nowrap !important;
+    letter-spacing: -.005em
 }
 
 .sub {
