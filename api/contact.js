@@ -1,5 +1,5 @@
-// Vercel serverless function — sends clean, professional contact inquiries via Gmail SMTP
-// using Nodemailer + an App Password.
+// Vercel serverless function — sends formatted HTML + Plain Text contact form inquiries
+// via Gmail SMTP using Nodemailer + an App Password.
 //
 // Required environment variables in Vercel:
 //   GMAIL_USER          your Gmail address (e.g. virendramekhlework@gmail.com)
@@ -60,6 +60,7 @@ module.exports = async (req, res) => {
       day: 'numeric',
       hour: '2-digit',
       minute: '2-digit',
+      second: '2-digit',
       timeZone: 'Asia/Kolkata',
       timeZoneName: 'short'
     });
@@ -68,84 +69,103 @@ module.exports = async (req, res) => {
     const safeEmail = escapeHtml(cleanEmail);
     const safeMessage = escapeHtml(cleanMessage).replace(/\n/g, '<br>');
 
-    // Clean, executive, native email layout (no bloated nested boxes or colored voids)
+    // Card template (the exact design you loved in the first screenshot)
     const htmlContent = `
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Portfolio Inquiry from ${safeName}</title>
+  <title>New Portfolio Message</title>
 </head>
-<body style="margin: 0; padding: 24px 16px; background-color: #FFFFFF; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #1B2A44; line-height: 1.6; -webkit-font-smoothing: antialiased;">
-  <div style="max-width: 580px; margin: 0 auto;">
-    
-    <!-- Header -->
-    <div style="padding-bottom: 14px; border-bottom: 2px solid #4B5BEA;">
-      <span style="font-size: 11px; font-weight: 700; color: #4B5BEA; text-transform: uppercase; letter-spacing: 0.08em;">
-        Portfolio Contact Form
-      </span>
-      <h2 style="margin: 6px 0 0; font-size: 20px; font-weight: 700; color: #1B2A44; letter-spacing: -0.01em;">
-        New Message from ${safeName}
-      </h2>
-    </div>
+<body style="margin: 0; padding: 32px 16px; background-color: #F4F6FB; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #1B2A44; -webkit-font-smoothing: antialiased;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+    <tr>
+      <td align="center">
+        <!-- Main Card -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 560px; background-color: #FFFFFF; border-radius: 16px; border: 1px solid #E3EBFA; box-shadow: 0 4px 20px rgba(27, 42, 68, 0.05); overflow: hidden;">
+          
+          <!-- Sleek Top Accent Line -->
+          <tr>
+            <td style="height: 4px; background: linear-gradient(90deg, #4B5BEA, #7FA8FF);"></td>
+          </tr>
 
-    <!-- Details Table -->
-    <table role="presentation" style="width: 100%; margin: 18px 0; border-collapse: collapse;">
-      <tr>
-        <td style="padding: 6px 0; color: #718096; font-size: 14px; font-weight: 600; width: 75px; vertical-align: top;">
-          From:
-        </td>
-        <td style="padding: 6px 0; color: #1B2A44; font-size: 14px; font-weight: 600; vertical-align: top;">
-          ${safeName}
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 6px 0; color: #718096; font-size: 14px; font-weight: 600; vertical-align: top;">
-          Email:
-        </td>
-        <td style="padding: 6px 0; font-size: 14px; vertical-align: top;">
-          <a href="mailto:${safeEmail}" style="color: #4B5BEA; text-decoration: none; font-weight: 600;">
-            ${safeEmail}
-          </a>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 6px 0; color: #718096; font-size: 13px; font-weight: 600; vertical-align: top;">
-          Received:
-        </td>
-        <td style="padding: 6px 0; color: #718096; font-size: 13px; vertical-align: top;">
-          ${formattedDate}
-        </td>
-      </tr>
-    </table>
+          <!-- Header with Sender Info -->
+          <tr>
+            <td style="padding: 28px 32px 18px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td>
+                    <span style="display: inline-block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #4B5BEA; margin-bottom: 4px;">
+                      Portfolio Inquiry
+                    </span>
+                    <h2 style="margin: 2px 0 0; font-size: 20px; font-weight: 700; color: #1B2A44; letter-spacing: -0.01em;">
+                      ${safeName}
+                    </h2>
+                    <a href="mailto:${safeEmail}" style="display: inline-block; margin-top: 4px; font-size: 14px; color: #46587A; text-decoration: none;">
+                      ${safeEmail}
+                    </a>
+                  </td>
+                  <td align="right" valign="top">
+                    <span style="font-size: 12px; color: #8C9BB5; white-space: nowrap;">
+                      ${formattedDate}
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-    <!-- Message Block -->
-    <div style="margin: 18px 0 24px; padding: 18px 20px; background-color: #F8FAFD; border-left: 3px solid #4B5BEA; border-radius: 6px;">
-      <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #718096; margin-bottom: 8px;">
-        Message
-      </div>
-      <div style="font-size: 15px; line-height: 1.65; color: #1B2A44; white-space: pre-wrap; word-break: break-word;">
+          <!-- Hairline Divider -->
+          <tr>
+            <td style="padding: 0 32px;">
+              <div style="border-top: 1px solid #EEF2F8; width: 100%;"></div>
+            </td>
+          </tr>
+
+          <!-- Message Body -->
+          <tr>
+            <td style="padding: 22px 32px 28px;">
+              <div style="font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #8C9BB5; margin-bottom: 12px;">
+                Message
+              </div>
+              <div style="font-size: 15px; line-height: 1.7; color: #1B2A44; white-space: pre-wrap; word-break: break-word;">
 ${safeMessage}
-      </div>
-    </div>
+              </div>
+            </td>
+          </tr>
 
-    <!-- Quick Reply Footer -->
-    <div style="padding-top: 16px; border-top: 1px solid #E2E8F0; font-size: 13px; color: #718096;">
-      <p style="margin: 0 0 12px;">
-        Hit <strong>Reply</strong> in your email client to respond directly to <strong>${safeName}</strong> (<a href="mailto:${safeEmail}" style="color: #4B5BEA; text-decoration: none;">${safeEmail}</a>).
-      </p>
-      <a href="mailto:${safeEmail}?subject=Re:%20Portfolio%20inquiry%20from%20${encodeURIComponent(cleanName)}" style="display: inline-block; background-color: #1B2A44; color: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; padding: 9px 18px; border-radius: 6px;">
-        Reply to ${safeName} &rarr;
-      </a>
-    </div>
+          <!-- Action Footer -->
+          <tr>
+            <td style="padding: 18px 32px; background-color: #FAFBFD; border-top: 1px solid #EEF2F8;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td>
+                    <a href="mailto:${safeEmail}?subject=Re:%20Portfolio%20inquiry%20from%20${encodeURIComponent(cleanName)}" style="display: inline-block; background-color: #1B2A44; color: #FFFFFF; font-size: 13px; font-weight: 600; text-decoration: none; padding: 10px 20px; border-radius: 8px;">
+                      Reply to ${safeName} &rarr;
+                    </a>
+                  </td>
+                  <td align="right" valign="middle">
+                    <span style="font-size: 12px; color: #8C9BB5;">
+                      virendra-portfolio
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-  </div>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
 `;
 
-    // Clean plain text fallback
-    const textContent = `NEW PORTFOLIO INQUIRY
+    // High-clarity plain text fallback
+    const textContent = `====================================================
+NEW PORTFOLIO INQUIRY
+====================================================
 
 From:     ${cleanName}
 Email:    ${cleanEmail}
@@ -157,7 +177,8 @@ MESSAGE:
 ${cleanMessage}
 
 ----------------------------------------------------
-Reply directly by hitting Reply or emailing: ${cleanEmail}`;
+Reply directly by emailing: ${cleanEmail}
+====================================================`;
 
     await transporter.sendMail({
       from: `"${cleanName} (Portfolio)" <${process.env.GMAIL_USER}>`,
